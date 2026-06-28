@@ -1,6 +1,9 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useState } from 'react'
+
+const DEFAULT_FAVICON = '/icon/mengyou.png'
 
 export default function BentoCard({ card, isFocused, size = 'normal' }) {
+  const [imgError, setImgError] = useState(false)
   const cardRef = useRef(null)
 
   const handleMouseMove = useCallback(e => {
@@ -61,12 +64,19 @@ export default function BentoCard({ card, isFocused, size = 'normal' }) {
             strokeLinejoin="round"
           />
         </svg>
-        {card.favicon && (
+        {card.favicon && !imgError ? (
           <img
             src={card.favicon}
             alt=""
             className="w-4 h-4 rounded"
-            onError={e => { e.target.style.display = 'none' }}
+            onError={() => setImgError(true)}
+            onLoad={e => { if (e.target.naturalWidth <= 16) setImgError(true) }}
+          />
+        ) : (
+          <img
+            src={DEFAULT_FAVICON}
+            alt=""
+            className="w-4 h-4 rounded"
           />
         )}
       </div>

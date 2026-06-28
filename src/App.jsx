@@ -8,12 +8,7 @@ import SidebarContextMenu from './components/SidebarContextMenu.jsx'
 const API_BASE = '/api'
 
 const DEFAULT_SIDEBAR = [
-  { id: 'dashboard', label: '仪表盘', icon: 'dashboard' },
-  { id: 'portfolio', label: '个人作品', icon: 'portfolio' },
-  { id: 'github', label: 'GitHub 项目', icon: 'github' },
-  { id: 'bookmarks', label: '收藏夹', icon: 'bookmark' },
-  { id: 'notes', label: '笔记', icon: 'notes' },
-  { id: 'tools', label: '工具集', icon: 'tools' },
+  { id: 'dashboard', label: '首页', icon: 'dashboard' },
 ]
 
 const DEFAULT_CATEGORIES = ['前端', '后端', 'DevOps', '工具', '视频', '阅读', '文档', 'AI', '设计', '生活', '学习', '工作', '金融', '社区']
@@ -40,10 +35,10 @@ function Sidebar({ isOpen, onClose, items, activeItem, onSelectItem, onEdit }) {
       <aside className={`fixed lg:sticky top-0 left-0 h-screen z-50 flex flex-col transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} w-[260px] shrink-0`} style={{ background: 'rgba(250, 248, 244, 0.95)', borderRight: '1px solid #ede9e1', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
         <div className="h-16 flex items-center justify-between px-5" style={{ borderBottom: '1px solid #ede9e1' }}>
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(192, 97, 42, 0.1)', border: '1px solid rgba(192, 97, 42, 0.2)' }}>
-              <svg className="w-4 h-4" style={{ color: '#c0612a' }} viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" >
+              <img src="/icon/zhaoshou.svg" alt="" className="w-4 h-4" style={{ color: '#c0612a' }} />
             </div>
-            <span className="text-sm font-semibold tracking-tight" style={{ color: '#3d3831' }}>导航站</span>
+            <span className="text-sm font-semibold tracking-tight" style={{ color: '#3d3831' }}>涛的导航站</span>
           </div>
           <button onClick={onClose} className="lg:hidden p-2 rounded-lg transition-colors" style={{ color: '#8c7e72' }} aria-label="关闭侧边栏"><Icon name="close" className="w-5 h-5" /></button>
         </div>
@@ -237,7 +232,7 @@ export default function App() {
           {activeSidebarItem === 'dashboard' ? (
             <div className="max-w-2xl">
               <div className="mb-12">
-                <h1 className="text-4xl font-bold tracking-tight mb-4" style={{ color: '#3d3831' }}>导航站</h1>
+                <h1 className="text-4xl font-bold tracking-tight mb-4" style={{ color: '#3d3831' }}>个人导航站</h1>
                 <p className="text-base leading-relaxed" style={{ color: '#8c7e72' }}>
                   一个简单高效的导航工具，帮助你整理和快速访问常用链接。
                 </p>
@@ -252,7 +247,7 @@ export default function App() {
                         <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/></svg>
                       </div>
                       <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>多栏目管理</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>将链接按个人作品、GitHub 项目、收藏夹等分类管理，清晰有序。</p>
+                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>左侧栏目分类管理，右键新增栏目或编辑已有栏目。</p>
                     </div>
                     <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
                       <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
@@ -263,17 +258,17 @@ export default function App() {
                     </div>
                     <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
                       <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
-                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><path d="M3 6h14M8 6V4h4v2M5 6v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       </div>
-                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>右键菜单</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>右键点击空白处新增链接，右键点击卡片编辑或删除。</p>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>置顶收藏</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>右键卡片可置顶，重要链接排在最前，置顶卡片有特殊样式。</p>
                     </div>
                     <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
                       <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
-                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><path d="M10 3c-3.87 0-7 3.13-7 7 0 3.09 2 5.73 4.77 6.65.35.06.48-.15.48-.34v-1.2c-1.94.42-2.35-.94-2.35-.94-.32-.81-.78-1.03-.78-1.03-.64-.44.05-.43.05-.43.7.05 1.07.72 1.07.72.62 1.07 1.63.76 2.03.58.06-.45.24-.76.44-.93-1.55-.18-3.18-.78-3.18-3.45 0-.76.27-1.38.72-1.87-.07-.18-.31-.89.07-1.84 0 0 .59-.19 1.93.72a6.7 6.7 0 0 1 1.75-.24c.6 0 1.2.08 1.75.24 1.34-.91 1.93-.72 1.93-.72.38.95.14 1.66.07 1.84.45.49.72 1.11.72 1.87 0 2.68-1.63 3.27-3.19 3.45.25.22.48.64.48 1.29v1.91c0 .19.13.4.48.34A6.997 6.997 0 0 0 17 10c0-3.87-3.13-7-7-7z" stroke="currentColor" strokeWidth="1.2" fill="none"/></svg>
+                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><path d="M3 6h14M8 6V4h4v2M5 6v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       </div>
-                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>本地存储</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>数据保存在浏览器本地，无隐私风险，换设备需手动同步。</p>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>右键菜单</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>右键空白处新增链接，右键卡片编辑、置顶或删除。</p>
                     </div>
                   </div>
                 </section>
@@ -287,15 +282,15 @@ export default function App() {
                     </div>
                     <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
                       <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>2</span>
-                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>右键点击空白区域，新增链接卡片</p>
+                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>右键点击空白区域，新增链接卡片；右键点击栏目区域，新增栏目</p>
                     </div>
                     <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
                       <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>3</span>
-                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>右键点击卡片，编辑或删除已有链接</p>
+                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>右键点击卡片，可编辑、置顶或删除已有链接</p>
                     </div>
                     <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
                       <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>4</span>
-                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>点击栏目右侧的编辑按钮，可新增或管理左侧栏目</p>
+                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>点击栏目右侧的编辑按钮，可编辑或删除左侧栏目</p>
                     </div>
                   </div>
                 </section>
@@ -322,7 +317,7 @@ export default function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" role="list" aria-label="链接列表">
                   {filtered.map((card, i) => (
                     <div key={card.id} data-card-id={card.id} className="reveal" style={{ animationDelay: Math.min(i * 40, 320) + 'ms' }} role="listitem">
-                      <BentoCard card={card} isFocused={focusedIndex === i} />
+                      <BentoCard key={card.id} card={card} isFocused={focusedIndex === i} />
                     </div>
                   ))}
                 </div>

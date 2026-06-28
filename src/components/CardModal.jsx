@@ -5,7 +5,12 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
   const [form, setForm] = useState({ title: '', description: '', url: '', category: '', favicon: '' })
   const [errors, setErrors] = useState({})
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [catOpen, setCatOpen] = useState(false)
+  const [catSearch, setCatSearch] = useState('')
   const titleRef = useRef(null)
+  const catSearchRef = useRef(null)
+
+  const filteredCats = categories.filter(c => c !== '全部' && c.toLowerCase().includes(catSearch.toLowerCase()))
 
   useEffect(() => {
     if (isOpen) {
@@ -15,6 +20,8 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
         setForm({ title: '', description: '', url: '', category: categories[1] || '', favicon: '' })
       }
       setErrors({})
+      setCatOpen(false)
+      setCatSearch('')
       setTimeout(() => titleRef.current?.focus(), 100)
     }
   }, [isOpen, card, categories])
@@ -76,7 +83,7 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} onKeyDown={e => { if (e.key === 'Enter') e.preventDefault() }} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1.5" style={{ color: '#5c5049' }}>
               标题
@@ -145,7 +152,7 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
             <div className="relative">
               <button
                 type="button"
-                onClick={() => document.getElementById('cat-dropdown').classList.toggle('hidden')}
+                onClick={() => { setCatOpen(!catOpen); if (!catOpen) setTimeout(() => catSearchRef.current?.focus(), 50) }}
                 className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm border outline-none transition-all"
                 style={{
                   background: '#faf8f4',
@@ -158,25 +165,42 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
                   <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
-              <div
-                id="cat-dropdown"
-                className="hidden absolute top-full left-0 right-0 mt-1 rounded-xl border overflow-y-auto z-10"
-                style={{ background: '#ffffff', borderColor: '#ede9e1', boxShadow: '0 8px 24px rgba(61,56,49,0.1)', maxHeight: '240px' }}
-              >
-                {categories.filter(c => c !== '全部').map(cat => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => { setForm(f => ({ ...f, category: cat })); document.getElementById('cat-dropdown').classList.add('hidden') }}
-                    className="w-full text-left px-3 py-2.5 text-sm transition-colors"
-                    style={{ color: form.category === cat ? '#c0612a' : '#5c5049', background: form.category === cat ? 'rgba(192,97,42,0.06)' : 'transparent' }}
-                    onMouseEnter={e => { if (form.category !== cat) e.currentTarget.style.background = 'rgba(192,97,42,0.1)' }}
-                    onMouseLeave={e => { if (form.category !== cat) e.currentTarget.style.background = 'transparent' }}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
+              {catOpen && (
+                <div
+                  className="absolute top-full left-0 right-0 mt-1 rounded-xl border overflow-hidden z-10"
+                  style={{ background: '#ffffff', borderColor: '#ede9e1', boxShadow: '0 8px 24px rgba(61,56,49,0.1)' }}
+                  onClick={e => e.stopPropagation()}
+                >
+                  <div className="p-2" style={{ borderBottom: '1px solid #ede9e1' }}>
+                    <input
+                      ref={catSearchRef}
+                      type="text"
+                      placeholder="搜索分类..."
+                      value={catSearch}
+                      onChange={e => setCatSearch(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg text-sm border outline-none"
+                      style={{ background: '#faf8f4', borderColor: '#ede9e1', color: '#3d3831' }}
+                    />
+                  </div>
+                  <div className="overflow-y-auto" style={{ maxHeight: '200px' }}>
+                    {filteredCats.length > 0 ? filteredCats.map(cat => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => { setForm(f => ({ ...f, category: cat })); setCatOpen(false); setCatSearch('') }}
+                        className="w-full text-left px-3 py-2.5 text-sm transition-colors"
+                        style={{ color: form.category === cat ? '#c0612a' : '#5c5049', background: form.category === cat ? 'rgba(192,97,42,0.06)' : 'transparent' }}
+                        onMouseEnter={e => { if (form.category !== cat) e.currentTarget.style.background = 'rgba(192,97,42,0.1)' }}
+                        onMouseLeave={e => { if (form.category !== cat) e.currentTarget.style.background = 'transparent' }}
+                      >
+                        {cat}
+                      </button>
+                    )) : (
+                      <div className="px-3 py-4 text-center text-sm" style={{ color: '#c9c0b4' }}>无匹配分类</div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
             {errors.category && (
               <p className="mt-1 text-xs" style={{ color: '#e53e3e' }}>{errors.category}</p>
