@@ -21,4 +21,14 @@
     "description": "下一代前端构建工具，极速开发启动，热更新爽快。",
     "url": "https://vitejs.dev",
     "category": "前端",
-    "favicon": "https://www.google.com/s2/favicons?domain=vit
+    "favicon": "https://www.google.com/s2/favicons?domain=vitejs.dev&sz=32"
+  },
+  {
+    "id": "tool-4",
+    "title": "Node.js",
+    "description": "基于 Chrome V8 引擎的 JavaScript 运行时，可用于服务端开发。",
+    "url": "https://nodejs.org",
+    "category": "后端",
+    "favicon": "https://www.google.com/s2/favicons?domain=nodejs.org&sz=32"
+  }
+]

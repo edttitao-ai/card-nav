@@ -19,3 +19,14 @@
     "label": "学习",
     "icon": "tools"
   },
+  {
+    "id": "ai-chat",
+    "label": "AI聊天网站",
+    "icon": "dashboard"
+  },
+  {
+    "id": "recruitment",
+    "label": "招聘网站",
+    "icon": "tools"
+  }
+]
