@@ -145,6 +145,18 @@
     outline: 2px solid rgba(192, 97, 42, 0.5);
     outline-offset: 2px;
   }
+
+  /* 置顶卡片 */
+  .bento-card.bordered-pinned {
+    border-color: rgba(192, 97, 42, 0.35);
+    background: linear-gradient(135deg, #fffbf7, #ffffff);
+  }
+
+  .bento-card.bordered-pinned:hover {
+    border-color: #c0612a;
+    box-shadow: 0 6px 24px rgba(192, 97, 42, 0.18),
+      0 0 0 1px rgba(192, 97, 42, 0.25);
+  }
 }
 
 @layer utilities {

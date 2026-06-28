@@ -68,9 +68,7 @@ function Sidebar({ isOpen, onClose, items, activeItem, onSelectItem, onEdit }) {
             ))}
           </ul>
         </nav>
-        <div className="p-4" style={{ borderTop: '1px solid #ede9e1' }}>
-          <div className="text-xs" style={{ color: '#c9c0b4' }}>v1.0.0</div>
-        </div>
+
       </aside>
     </>
   )
@@ -342,7 +340,7 @@ export default function App() {
         </main>
       </div>
       <CardModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSave={handleSaveCard} onDelete={handleDeleteCard} card={editingCard} categories={categories} />
-      {contextMenu && <ContextMenu x={contextMenu.x} y={contextMenu.y} card={contextMenu.card} onClose={() => setContextMenu(null)} onEdit={handleEditCard} onDelete={handleDeleteCard} onAdd={handleAddCard} />}
+      {contextMenu && <ContextMenu x={contextMenu.x} y={contextMenu.y} card={contextMenu.card} onClose={() => setContextMenu(null)} onEdit={handleEditCard} onDelete={handleDeleteCard} onAdd={handleAddCard} onTogglePin={handleTogglePin} />}
       <SidebarModal isOpen={sidebarModalOpen} onClose={() => setSidebarModalOpen(false)} onSave={handleSaveSidebarItem} onDelete={handleDeleteSidebarItem} item={editingSidebarItem} />
       {sidebarContextMenu && (
         <SidebarContextMenu

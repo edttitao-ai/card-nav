@@ -28,11 +28,18 @@ export default function BentoCard({ card, isFocused, size = 'normal' }) {
       href={card.url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${cardClass} flex flex-col h-full ${isFocused ? 'focused' : ''}`}
+      className={`${cardClass} flex flex-col h-full ${isFocused ? 'focused' : ''} ${card.pinned ? 'bordered-pinned' : ''}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <span className="card-category">{card.category}</span>
+      <div className="flex items-center gap-2 mb-1">
+        {card.pinned && (
+          <span style={{ color: '#c0612a' }}>
+            <svg className="w-6 h-6" viewBox="0 0 20 20" fill="currentColor"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/></svg>
+          </span>
+        )}
+        <span className="card-category">{card.category}</span>
+      </div>
 
       <h2 className="card-title">{card.title}</h2>
 

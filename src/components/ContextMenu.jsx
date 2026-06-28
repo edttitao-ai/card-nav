@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import ConfirmDialog from './ConfirmDialog.jsx'
 
-export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onAdd }) {
+export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onAdd, onTogglePin }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const menuRef = useRef(null)
 
@@ -63,6 +63,17 @@ export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onA
                 <path d="M14.5 3.5L16.5 5.5M3 17l2-6 8.5-8.5a2.12 2.12 0 0 1 3 3L8 14l-6 2 2-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               编辑
+            </button>
+            <button
+              style={btnStyle}
+              onClick={() => { onTogglePin(card.id); onClose() }}
+              onMouseEnter={e => e.target.style.background = '#faf8f4'}
+              onMouseLeave={e => e.target.style.background = 'transparent'}
+            >
+              <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" style={{color: card.pinned ? '#c0612a' : '#8c7e72'}}>
+                <path d="M12 4l1 3h3l-2.5 2 1 3-2.5-1.5-2.5 1.5 1-3L8 7h3l1-3z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              {card.pinned ? '取消置顶' : '置顶'}
             </button>
             <button
               style={btnStyle}
