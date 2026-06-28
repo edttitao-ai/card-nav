@@ -1,0 +1,58 @@
+import { useRef, useCallback } from 'react'
+
+export default function BentoCard({ card, isFocused, size = 'normal' }) {
+  const cardRef = useRef(null)
+
+  const handleMouseMove = useCallback(e => {
+    const el = cardRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    el.style.setProperty('--mx', `${x}%`)
+    el.style.setProperty('--my', `${y}%`)
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    const el = cardRef.current
+    if (!el) return
+    el.style.setProperty('--mx', '50%')
+    el.style.setProperty('--my', '50%')
+  }, [])
+
+  const cardClass = size === 'large' ? 'bento-card bento-card-lg' : 'bento-card'
+
+  return (
+    <a
+      ref={cardRef}
+      href={card.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`${cardClass} group flex flex-col h-full ${isFocused ? 'focused' : ''}`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <span className="card-category">{card.category}</span>
+
+      <h2 className="card-title">{card.title}</h2>
+
+      <p className="card-desc flex-1">{card.description}</p>
+
+      <svg
+        className="card-arrow"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          d="M4 16L16 4M16 4H8M16 4v8"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </a>
+  )
+}

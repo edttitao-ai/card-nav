@@ -10,35 +10,90 @@
   }
 
   body {
-    @apply bg-[#f8f9fa] text-gray-900;
+    @apply text-[#3d3831];
+    background: #faf8f4;
     font-family: 'DM Sans', system-ui, sans-serif;
   }
 
-  @media (prefers-color-scheme: dark) {
-    body {
-      @apply bg-[#0f1117] text-gray-100;
-    }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #faf8f4; }
+  ::-webkit-scrollbar-thumb { @apply bg-[#ede9e1] rounded-full; }
+
+  ::selection {
+    background: rgba(192, 97, 42, 0.15);
+    color: #c0612a;
   }
 }
 
-/* Spotlight Card */
 @layer components {
-  .spotlight-card {
-    @apply bg-white dark:bg-[#1a1d27] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-all duration-200;
-    position: relative;
-    overflow: hidden;
-    --mx: 50%;
-    --my: 50%;
+  /* 导航 */
+  .nav-bar {
+    @apply sticky top-0 z-50 backdrop-blur-md;
+    background: rgba(250, 248, 244, 0.88);
+    border-bottom: 1px solid #ede9e1;
   }
 
-  .spotlight-card::before {
+  /* 搜索框 */
+  .search-input {
+    @apply w-full pl-10 pr-4 py-2.5 rounded-xl text-sm border outline-none transition-all duration-200;
+    background: #ffffff;
+    border-color: #ede9e1;
+    color: #3d3831;
+  }
+
+  .search-input::placeholder { color: #b5ada3; }
+
+  .search-input:focus {
+    border-color: rgba(192, 97, 42, 0.4);
+    box-shadow: 0 0 0 3px rgba(192, 97, 42, 0.08);
+  }
+
+  /* 分类标签 */
+  .tag {
+    @apply inline-block px-3 py-1 text-xs font-medium rounded-full transition-all duration-150 cursor-pointer;
+  }
+
+  .tag-active {
+    background: #c0612a;
+    @apply text-white font-semibold;
+  }
+
+  .tag-inactive {
+    @apply border;
+    background: #ffffff;
+    border-color: #ede9e1;
+    color: #8c7e72;
+  }
+
+  .tag-inactive:hover {
+    border-color: #c9c0b4;
+    color: #5c5049;
+    background: #f5f1eb;
+  }
+
+  /* Bento 卡片 */
+  .bento-card {
+    @apply relative overflow-hidden rounded-2xl p-6 transition-all duration-300 cursor-pointer;
+    background: #ffffff;
+    border: 1px solid #ede9e1;
+    box-shadow: 0 1px 4px rgba(61, 56, 49, 0.06);
+  }
+
+  .bento-card:hover {
+    border-color: rgba(192, 97, 42, 0.3);
+    box-shadow: 0 6px 24px rgba(61, 56, 49, 0.1),
+      0 0 0 1px rgba(192, 97, 42, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .bento-card::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
     background: radial-gradient(
-      600px circle at var(--mx) var(--my),
-      rgba(16, 185, 129, 0.06),
+      500px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(192, 97, 42, 0.05),
       transparent 40%
     );
     opacity: 0;
@@ -46,41 +101,49 @@
     pointer-events: none;
   }
 
-  .spotlight-card:hover::before {
-    opacity: 1;
+  .bento-card:hover::before { opacity: 1; }
+
+  .card-category {
+    @apply inline-block text-[10px] uppercase tracking-widest font-semibold mb-3;
+    color: rgba(192, 97, 42, 0.65);
   }
 
-  .spotlight-card:hover {
-    @apply border-emerald-200 dark:border-emerald-800 shadow-sm;
-    transform: translateY(-2px);
+  .card-title {
+    @apply text-base font-semibold leading-snug mb-2;
+    color: #3d3831;
   }
 
-  .card-link-icon {
-    @apply w-4 h-4 text-gray-300 dark:text-gray-600 transition-colors duration-200;
+  .card-desc {
+    @apply text-sm leading-relaxed;
+    color: #8c7e72;
   }
 
-  .card:hover .card-link-icon {
-    @apply text-gray-400 dark:text-gray-500;
+  .card-arrow {
+    @apply absolute bottom-5 right-5 w-5 h-5 transition-all duration-200;
+    color: #c9c0b4;
   }
 
-  .tag {
-    @apply inline-block px-2.5 py-0.5 text-xs font-medium rounded-full transition-colors duration-150;
+  .bento-card:hover .card-arrow {
+    color: #c0612a;
+    transform: translate(2px, -2px);
   }
 
-  .tag-active {
-    @apply bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300;
+  /* 大卡片 featured */
+  .bento-card-lg {
+    @apply bento-card;
+    background: linear-gradient(135deg, #fffbf7, #ffffff);
+    border-color: rgba(192, 97, 42, 0.18);
   }
 
-  .tag-inactive {
-    @apply bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700;
+  .bento-card-lg:hover {
+    background: linear-gradient(135deg, #fff8f2, #ffffff);
+    border-color: rgba(192, 97, 42, 0.45);
   }
 
-  .search-input {
-    @apply w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition-all duration-200;
-  }
-
-  .search-input:focus {
-    @apply border-emerald-400 dark:border-emerald-500 ring-2 ring-emerald-100 dark:ring-emerald-900;
+  /* 键盘聚焦 */
+  .bento-card.focused {
+    outline: 2px solid rgba(192, 97, 42, 0.5);
+    outline-offset: 2px;
   }
 }
 
@@ -95,24 +158,12 @@
   }
 
   @keyframes fadeUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal {
-      opacity: 1;
-      transform: none;
-    }
-
-    .spotlight-card:hover {
-      transform: none;
-    }
-
-    .spotlight-card::before {
-      display: none;
-    }
+    .reveal { opacity: 1; transform: none; }
+    .bento-card:hover, .bento-card-lg:hover { transform: none; }
+    .bento-card::before { display: none; }
   }
 }
