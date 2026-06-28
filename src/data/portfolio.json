@@ -23,32 +23,3 @@
     "category": "前端",
     "favicon": "https://www.google.com/s2/favicons?domain=119.29.90.80&sz=32",
     "id": "1782638741733-syfohhe",
-    "pinned": true
-  },
-  {
-    "title": "Spring AI Alibaba教程",
-    "description": "用AI生成的，Spring AI Alibaba教程网址",
-    "url": "http://119.29.90.80:4568/",
-    "category": "AI",
-    "favicon": "https://www.google.com/s2/favicons?domain=119.29.90.80&sz=32",
-    "id": "1782639347552-8uv1gbf"
-  },
-  {
-    "title": "LangChain4j 教程",
-    "description": "用AI生成的，LangChain4j 教程网址",
-    "url": "http://119.29.90.80:4569/",
-    "category": "AI",
-    "favicon": "https://www.google.com/s2/favicons?domain=119.29.90.80&sz=32",
-    "id": "1782639389085-wwvfh9z",
-    "pinned": false
-  },
-  {
-    "title": "个人 CSDN博客",
-    "description": "个人的CSDN网址",
-    "url": "https://blog.csdn.net/tao9066?spm=1000.2115.3001.5343",
-    "category": "文档",
-    "favicon": "https://www.google.com/s2/favicons?domain=blog.csdn.net&sz=32",
-    "id": "1782641863581-n2da1go",
-    "pinned": true
-  }
-]
