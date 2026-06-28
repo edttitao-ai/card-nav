@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Boss直聘",
+    "description": "招聘网址",
+    "url": "https://www.zhipin.com/guangzhou/?seoRefer=index",
+    "category": "工作",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.zhipin.com&sz=32",
+    "id": "1782647454394-c99978w"
+  },
+  {
+    "title": "前程无忧",
+    "description": "招聘网站",
+    "url": "https://www.51job.com/",
+    "category": "工作",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.51job.com&sz=32",
+    "id": "1782647488585-km5oucd"
+  },
+  {
+    "title": "智联",
+    "description": "招聘网站",
+    "url": "https://www.zhaopin.com/",
+    "category": "工作",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.zhaopin.com&sz=32",
+    "id": "1782647519274-2vnreij"
+  }
+]
