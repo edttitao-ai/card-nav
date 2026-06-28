@@ -4,15 +4,8 @@ import CardModal from './components/CardModal.jsx'
 import ContextMenu from './components/ContextMenu.jsx'
 import SidebarModal from './components/SidebarModal.jsx'
 import SidebarContextMenu from './components/SidebarContextMenu.jsx'
-import dashboardData from './data/dashboard.json'
-import portfolioData from './data/portfolio.json'
-import githubData from './data/github.json'
-import bookmarksData from './data/bookmarks.json'
-import notesData from './data/notes.json'
-import toolsData from './data/tools.json'
 
-const STORAGE_KEY_PREFIX = 'card-nav-'
-const SIDEBAR_KEY = 'sidebar-items'
+const API_BASE = '/api'
 
 const DEFAULT_SIDEBAR = [
   { id: 'dashboard', label: '仪表盘', icon: 'dashboard' },
@@ -24,22 +17,6 @@ const DEFAULT_SIDEBAR = [
 ]
 
 const DEFAULT_CATEGORIES = ['前端', '后端', 'DevOps', '工具', '视频', '阅读', '文档', 'AI', '设计', '生活', '学习', '工作', '金融', '社区']
-
-const DATA_MAP = {
-  dashboard: dashboardData,
-  portfolio: portfolioData,
-  github: githubData,
-  bookmarks: bookmarksData,
-  notes: notesData,
-  tools: toolsData,
-}
-
-const loadSidebarItems = () => {
-  try {
-    const saved = localStorage.getItem(SIDEBAR_KEY)
-    return saved ? JSON.parse(saved) : DEFAULT_SIDEBAR
-  } catch { return DEFAULT_SIDEBAR }
-}
 
 const Icon = ({ name, className = '' }) => {
   const icons = {
@@ -102,7 +79,7 @@ function Sidebar({ isOpen, onClose, items, activeItem, onSelectItem, onEdit }) {
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeSidebarItem, setActiveSidebarItem] = useState('dashboard')
-  const [sidebarItems, setSidebarItems] = useState(loadSidebarItems)
+  const [sidebarItems, setSidebarItems] = useState(DEFAULT_SIDEBAR)
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false)
   const [editingSidebarItem, setEditingSidebarItem] = useState(null)
   const [search, setSearch] = useState('')
@@ -114,40 +91,67 @@ export default function App() {
   const [sidebarContextMenu, setSidebarContextMenu] = useState(null)
   const searchRef = useRef(null)
 
-  const defaultCards = DATA_MAP[activeSidebarItem] || []
+  const [cards, setCards] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  const [cards, setCards] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_PREFIX + activeSidebarItem)
-      return saved ? JSON.parse(saved) : defaultCards
-    } catch { return defaultCards }
-  })
-
+  // 加载左侧栏目数据
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_PREFIX + activeSidebarItem)
-      setCards(saved ? JSON.parse(saved) : DATA_MAP[activeSidebarItem] || [])
-    } catch { setCards(DATA_MAP[activeSidebarItem] || []) }
+    fetch(`${API_BASE}/data/sidebar`)
+      .then(res => res.json())
+      .then(data => { if (Array.isArray(data)) setSidebarItems(data) })
+      .catch(() => {})
+  }, [])
+
+  // 加载栏目数据
+  useEffect(() => {
+    if (activeSidebarItem === 'dashboard') {
+      setCards([])
+      return
+    }
+    setLoading(true)
+    fetch(`${API_BASE}/data/${activeSidebarItem}`)
+      .then(res => res.json())
+      .then(data => { setCards(Array.isArray(data) ? data : []); setLoading(false) })
+      .catch(() => { setCards([]); setLoading(false) })
     setSearch('')
     setActiveCategory('全部')
   }, [activeSidebarItem])
 
-  useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY_PREFIX + activeSidebarItem, JSON.stringify(cards)) } catch {}
-  }, [cards, activeSidebarItem])
+  // 保存到后端
+  const saveCards = useCallback((newCards) => {
+    if (activeSidebarItem === 'dashboard') return
+    setCards(newCards)
+    fetch(`${API_BASE}/data/${activeSidebarItem}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newCards),
+    }).catch(console.error)
+  }, [activeSidebarItem])
 
-  useEffect(() => {
-    try { localStorage.setItem(SIDEBAR_KEY, JSON.stringify(sidebarItems)) } catch {}
-  }, [sidebarItems])
+  // 保存栏目到后端
+  const saveSidebarItems = useCallback((newItems) => {
+    setSidebarItems(newItems)
+    fetch(`${API_BASE}/data/sidebar`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newItems),
+    }).catch(console.error)
+  }, [])
 
   const categories = useMemo(() => ['全部', ...new Set([...DEFAULT_CATEGORIES, ...cards.map(c => c.category)])], [cards])
 
   const filtered = useMemo(() => {
-    return cards.filter(card => {
-      const matchSearch = card.title.toLowerCase().includes(search.toLowerCase()) || card.description.toLowerCase().includes(search.toLowerCase())
-      const matchCategory = activeCategory === '全部' || card.category === activeCategory
-      return matchSearch && matchCategory
-    })
+    return cards
+      .filter(card => {
+        const matchSearch = card.title.toLowerCase().includes(search.toLowerCase()) || card.description.toLowerCase().includes(search.toLowerCase())
+        const matchCategory = activeCategory === '全部' || card.category === activeCategory
+        return matchSearch && matchCategory
+      })
+      .sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1
+        if (!a.pinned && b.pinned) return 1
+        return 0
+      })
   }, [cards, search, activeCategory])
 
   useEffect(() => {
@@ -181,13 +185,35 @@ export default function App() {
 
   const handleAddCard = () => { setEditingCard(null); setModalOpen(true) }
   const handleEditCard = card => { setEditingCard(card); setModalOpen(true) }
-  const handleSaveCard = card => { setCards(prev => { const exists = prev.find(c => c.id === card.id); if (exists) return prev.map(c => c.id === card.id ? card : c); return [...prev, card] }) }
-  const handleDeleteCard = id => { setCards(prev => prev.filter(c => c.id !== id)) }
+  const handleSaveCard = card => {
+    setCards(prev => {
+      const exists = prev.find(c => c.id === card.id)
+      const newCards = exists ? prev.map(c => c.id === card.id ? card : c) : [...prev, card]
+      saveCards(newCards)
+      return newCards
+    })
+  }
+  const handleDeleteCard = id => {
+    const newCards = cards.filter(c => c.id !== id)
+    saveCards(newCards)
+  }
+  const handleTogglePin = id => {
+    const newCards = cards.map(c => c.id === id ? { ...c, pinned: !c.pinned } : c)
+    saveCards(newCards)
+  }
 
   const handleAddSidebarItem = () => { setEditingSidebarItem(null); setSidebarModalOpen(true) }
   const handleEditSidebarItem = item => { setEditingSidebarItem(item); setSidebarModalOpen(true) }
-  const handleSaveSidebarItem = item => { setSidebarItems(prev => { const exists = prev.find(i => i.id === item.id); if (exists) return prev.map(i => i.id === item.id ? item : i); return [...prev, item] }) }
-  const handleDeleteSidebarItem = id => { setSidebarItems(prev => { const remaining = prev.filter(i => i.id !== id); if (activeSidebarItem === id && remaining.length > 0) setActiveSidebarItem(remaining[0].id); return remaining }) }
+  const handleSaveSidebarItem = item => {
+    const exists = sidebarItems.find(i => i.id === item.id)
+    const newItems = exists ? sidebarItems.map(i => i.id === item.id ? item : i) : [...sidebarItems, item]
+    saveSidebarItems(newItems)
+  }
+  const handleDeleteSidebarItem = id => {
+    const newItems = sidebarItems.filter(i => i.id !== id)
+    if (activeSidebarItem === id && newItems.length > 0) setActiveSidebarItem(newItems[0].id)
+    saveSidebarItems(newItems)
+  }
 
   const currentSidebarItem = sidebarItems.find(i => i.id === activeSidebarItem)
 

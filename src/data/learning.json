@@ -1,0 +1,26 @@
+[
+  {
+    "title": "犬小哈",
+    "description": "犬小哈教学网站",
+    "url": "https://www.quanxiaoha.com/",
+    "category": "后端",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.quanxiaoha.com&sz=32",
+    "id": "1782639564602-vdghq8l"
+  },
+  {
+    "title": "编程导航",
+    "description": "鱼皮的编程教程网址",
+    "url": "https://www.codefather.cn/",
+    "category": "后端",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.codefather.cn&sz=32",
+    "id": "1782639612386-cehbciw"
+  },
+  {
+    "title": "叶哥的技术分享",
+    "description": "叶哥的技术分享网址",
+    "url": "https://linuxeasy.site/",
+    "category": "学习",
+    "favicon": "https://www.google.com/s2/favicons?domain=linuxeasy.site&sz=32",
+    "id": "1782639663975-d1y7ien"
+  }
+]
