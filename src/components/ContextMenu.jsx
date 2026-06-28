@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
+import ConfirmDialog from './ConfirmDialog.jsx'
 
 export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onAdd }) {
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -64,7 +66,7 @@ export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onA
             </button>
             <button
               style={btnStyle}
-              onClick={() => { onDelete(card.id); onClose() }}
+              onClick={() => setConfirmDelete(true)}
               onMouseEnter={e => { e.target.style.background = '#fef2f2'; e.target.style.color = '#dc2626' }}
               onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#3d3831' }}
             >
@@ -88,6 +90,14 @@ export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onA
           </button>
         )}
       </div>
+      {confirmDelete && (
+        <ConfirmDialog
+          title={card.title}
+          message={`确定要删除「${card.title}」吗？此操作不可恢复。`}
+          onConfirm={() => { onDelete(card.id); onClose() }}
+          onCancel={() => setConfirmDelete(false)}
+        />
+      )}
     </div>
   )
 }

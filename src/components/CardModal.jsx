@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
+import ConfirmDialog from './ConfirmDialog.jsx'
 
 export default function CardModal({ isOpen, onClose, onSave, onDelete, card, categories }) {
   const [form, setForm] = useState({ title: '', description: '', url: '', category: '', favicon: '' })
   const [errors, setErrors] = useState({})
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const titleRef = useRef(null)
 
   useEffect(() => {
@@ -140,24 +142,42 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
             <label className="block text-sm font-medium mb-1.5" style={{ color: '#5c5049' }}>
               分类
             </label>
-            <input
-              type="text"
-              value={form.category}
-              onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-              className="w-full px-3 py-2.5 rounded-xl text-sm border outline-none transition-all"
-              style={{
-                background: '#faf8f4',
-                borderColor: errors.category ? '#e53e3e' : '#ede9e1',
-                color: '#3d3831',
-              }}
-              placeholder="例如：前端、工具、文档"
-              list="category-suggestions"
-            />
-            <datalist id="category-suggestions">
-              {categories.filter(c => c !== '全部').map(c => (
-                <option key={c} value={c} />
-              ))}
-            </datalist>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => document.getElementById('cat-dropdown').classList.toggle('hidden')}
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm border outline-none transition-all"
+                style={{
+                  background: '#faf8f4',
+                  borderColor: errors.category ? '#e53e3e' : '#ede9e1',
+                  color: form.category ? '#3d3831' : '#b5ada3',
+                }}
+              >
+                <span>{form.category || '选择分类'}</span>
+                <svg className="w-4 h-4 shrink-0" style={{ color: '#c9c0b4' }} viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              <div
+                id="cat-dropdown"
+                className="hidden absolute top-full left-0 right-0 mt-1 rounded-xl border overflow-y-auto z-10"
+                style={{ background: '#ffffff', borderColor: '#ede9e1', boxShadow: '0 8px 24px rgba(61,56,49,0.1)', maxHeight: '240px' }}
+              >
+                {categories.filter(c => c !== '全部').map(cat => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => { setForm(f => ({ ...f, category: cat })); document.getElementById('cat-dropdown').classList.add('hidden') }}
+                    className="w-full text-left px-3 py-2.5 text-sm transition-colors"
+                    style={{ color: form.category === cat ? '#c0612a' : '#5c5049', background: form.category === cat ? 'rgba(192,97,42,0.06)' : 'transparent' }}
+                    onMouseEnter={e => { if (form.category !== cat) e.currentTarget.style.background = 'rgba(192,97,42,0.1)' }}
+                    onMouseLeave={e => { if (form.category !== cat) e.currentTarget.style.background = 'transparent' }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
             {errors.category && (
               <p className="mt-1 text-xs" style={{ color: '#e53e3e' }}>{errors.category}</p>
             )}
@@ -179,6 +199,18 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
               }}
               placeholder="https://www.google.com/s2/favicons?domain=..."
             />
+            {form.favicon && (
+              <div className="mt-2 flex items-center gap-3">
+                <img
+                  src={form.favicon}
+                  alt="Logo 预览"
+                  className="w-8 h-8 rounded-lg object-contain"
+                  style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}
+                  onError={e => { e.currentTarget.style.display = 'none' }}
+                />
+                <span className="text-xs" style={{ color: '#c9c0b4' }}>预览</span>
+              </div>
+            )}
             <p className="mt-1 text-xs" style={{ color: '#c9c0b4' }}>
               留空则自动从链接获取 favicon
             </p>
@@ -188,16 +220,9 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
             {card && onDelete && (
               <button
                 type="button"
-                onClick={() => {
-                  onDelete(card.id)
-                  onClose()
-                }}
+                onClick={() => setConfirmDelete(true)}
                 className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
-                style={{
-                  background: '#fef2f2',
-                  color: '#dc2626',
-                  border: '1px solid #fecaca',
-                }}
+                style={{ background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}
               >
                 删除
               </button>
@@ -228,6 +253,14 @@ export default function CardModal({ isOpen, onClose, onSave, onDelete, card, cat
           </div>
         </form>
       </div>
+      {confirmDelete && (
+        <ConfirmDialog
+          title={card.title}
+          message={`确定要删除「${card.title}」吗？此操作不可恢复。`}
+          onConfirm={() => { onDelete(card.id); onClose() }}
+          onCancel={() => setConfirmDelete(false)}
+        />
+      )}
     </div>
   )
 }
