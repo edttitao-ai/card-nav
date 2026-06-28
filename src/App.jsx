@@ -210,43 +210,108 @@ export default function App() {
           <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 rounded-lg" style={{ color: '#5c5049' }} aria-label="打开侧边栏"><Icon name="menu" className="w-5 h-5" /></button>
         </header>
         <main className="max-w-6xl mx-auto px-6 py-12" onKeyDown={handleKeyDown} tabIndex={-1}>
-          {activeSidebarItem !== 'dashboard' && (
-            <div className="flex items-start justify-between mb-10">
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: '#3d3831' }}>{currentSidebarItem?.label || '导航站'}</h1>
-                <p className="text-sm" style={{ color: '#b5ada3' }}>{filtered.length} 个链接</p>
+          {activeSidebarItem === 'dashboard' ? (
+            <div className="max-w-2xl">
+              <div className="mb-12">
+                <h1 className="text-4xl font-bold tracking-tight mb-4" style={{ color: '#3d3831' }}>导航站</h1>
+                <p className="text-base leading-relaxed" style={{ color: '#8c7e72' }}>
+                  一个简单高效的导航工具，帮助你整理和快速访问常用链接。
+                </p>
               </div>
-            </div>
-          )}
-          {activeSidebarItem !== 'dashboard' && (
-            <div className="relative max-w-md mb-6">
-              <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#c9c0b4' }} viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.5" /><path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
-              <input ref={searchRef} type="text" className="search-input" placeholder="搜索..." value={search} onChange={e => setSearch(e.target.value)} aria-label="搜索链接" />
-            </div>
-          )}
-          {activeSidebarItem !== 'dashboard' && (
-            <div className="flex flex-wrap gap-2 mb-10">
-              {categories.map(cat => (
-                <button key={cat} onClick={() => setActiveCategory(cat)} className={"tag " + (activeCategory === cat ? 'tag-active' : 'tag-inactive')}>{cat}</button>
-              ))}
-            </div>
-          )}
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" role="list" aria-label="链接列表">
-              {filtered.map((card, i) => (
-                <div key={card.id} data-card-id={card.id} className="reveal" style={{ animationDelay: Math.min(i * 40, 320) + 'ms' }} role="listitem">
-                  <BentoCard card={card} isFocused={focusedIndex === i} />
-                </div>
-              ))}
+
+              <div className="space-y-8">
+                <section>
+                  <h2 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: '#c9c0b4' }}>功能特点</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
+                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/></svg>
+                      </div>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>多栏目管理</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>将链接按个人作品、GitHub 项目、收藏夹等分类管理，清晰有序。</p>
+                    </div>
+                    <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
+                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.5"/><path d="M13 13l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                      </div>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>快速搜索</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>按 Ctrl+K 快速聚焦搜索框，输入关键词即时过滤链接。</p>
+                    </div>
+                    <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
+                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><path d="M3 6h14M8 6V4h4v2M5 6v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>右键菜单</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>右键点击空白处新增链接，右键点击卡片编辑或删除。</p>
+                    </div>
+                    <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
+                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><path d="M10 3c-3.87 0-7 3.13-7 7 0 3.09 2 5.73 4.77 6.65.35.06.48-.15.48-.34v-1.2c-1.94.42-2.35-.94-2.35-.94-.32-.81-.78-1.03-.78-1.03-.64-.44.05-.43.05-.43.7.05 1.07.72 1.07.72.62 1.07 1.63.76 2.03.58.06-.45.24-.76.44-.93-1.55-.18-3.18-.78-3.18-3.45 0-.76.27-1.38.72-1.87-.07-.18-.31-.89.07-1.84 0 0 .59-.19 1.93.72a6.7 6.7 0 0 1 1.75-.24c.6 0 1.2.08 1.75.24 1.34-.91 1.93-.72 1.93-.72.38.95.14 1.66.07 1.84.45.49.72 1.11.72 1.87 0 2.68-1.63 3.27-3.19 3.45.25.22.48.64.48 1.29v1.91c0 .19.13.4.48.34A6.997 6.997 0 0 0 17 10c0-3.87-3.13-7-7-7z" stroke="currentColor" strokeWidth="1.2" fill="none"/></svg>
+                      </div>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>本地存储</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>数据保存在浏览器本地，无隐私风险，换设备需手动同步。</p>
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  <h2 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: '#c9c0b4' }}>使用说明</h2>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
+                      <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>1</span>
+                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>左侧选择栏目，进入不同链接分类页面</p>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
+                      <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>2</span>
+                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>右键点击空白区域，新增链接卡片</p>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
+                      <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>3</span>
+                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>右键点击卡片，编辑或删除已有链接</p>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
+                      <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>4</span>
+                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>点击栏目右侧的编辑按钮，可新增或管理左侧栏目</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
             </div>
           ) : (
-            <div className="text-center py-24">
-              <div className="mb-5 inline-flex items-center justify-center w-14 h-14 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1', boxShadow: '0 1px 4px rgba(61,56,49,0.06)' }}>
-                <svg className="w-6 h-6" style={{ color: '#c9c0b4' }} viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.5" /><path d="M16.5 16.5L21 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><path d="M8 11h6M11 8v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" /></svg>
+            <>
+              <div className="flex items-start justify-between mb-10">
+                <div>
+                  <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: '#3d3831' }}>{currentSidebarItem?.label || '导航站'}</h1>
+                  <p className="text-sm" style={{ color: '#b5ada3' }}>{filtered.length} 个链接</p>
+                </div>
               </div>
-              <p className="text-sm mb-3" style={{ color: '#b5ada3' }}>没有找到匹配的链接</p>
-              <button onClick={clearFilter} className="text-sm font-medium transition-colors" style={{ color: '#c0612a' }}>清除筛选</button>
-            </div>
+              <div className="relative max-w-md mb-6">
+                <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#c9c0b4' }} viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.5" /><path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                <input ref={searchRef} type="text" className="search-input" placeholder="搜索..." value={search} onChange={e => setSearch(e.target.value)} aria-label="搜索链接" />
+              </div>
+              <div className="flex flex-wrap gap-2 mb-10">
+                {categories.map(cat => (
+                  <button key={cat} onClick={() => setActiveCategory(cat)} className={"tag " + (activeCategory === cat ? 'tag-active' : 'tag-inactive')}>{cat}</button>
+                ))}
+              </div>
+              {filtered.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" role="list" aria-label="链接列表">
+                  {filtered.map((card, i) => (
+                    <div key={card.id} data-card-id={card.id} className="reveal" style={{ animationDelay: Math.min(i * 40, 320) + 'ms' }} role="listitem">
+                      <BentoCard card={card} isFocused={focusedIndex === i} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-24">
+                  <div className="mb-5 inline-flex items-center justify-center w-14 h-14 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1', boxShadow: '0 1px 4px rgba(61,56,49,0.06)' }}>
+                    <svg className="w-6 h-6" style={{ color: '#c9c0b4' }} viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.5" /><path d="M16.5 16.5L21 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><path d="M8 11h6M11 8v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" /></svg>
+                  </div>
+                  <p className="text-sm mb-3" style={{ color: '#b5ada3' }}>没有找到匹配的链接</p>
+                  <button onClick={clearFilter} className="text-sm font-medium transition-colors" style={{ color: '#c0612a' }}>清除筛选</button>
+                </div>
+              )}
+            </>
           )}
         </main>
       </div>
