@@ -28,7 +28,7 @@ export default function BentoCard({ card, isFocused, size = 'normal' }) {
       href={card.url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${cardClass} group flex flex-col h-full ${isFocused ? 'focused' : ''}`}
+      className={`${cardClass} flex flex-col h-full ${isFocused ? 'focused' : ''}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
@@ -38,21 +38,31 @@ export default function BentoCard({ card, isFocused, size = 'normal' }) {
 
       <p className="card-desc flex-1">{card.description}</p>
 
-      <svg
-        className="card-arrow"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <path
-          d="M4 16L16 4M16 4H8M16 4v8"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <div className="flex items-center justify-between mt-auto pt-2">
+        <svg
+          className="card-arrow"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            d="M4 16L16 4M16 4H8M16 4v8"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        {card.favicon && (
+          <img
+            src={card.favicon}
+            alt=""
+            className="w-4 h-4 rounded"
+            onError={e => { e.target.style.display = 'none' }}
+          />
+        )}
+      </div>
     </a>
   )
 }

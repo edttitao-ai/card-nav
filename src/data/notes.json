@@ -1,0 +1,26 @@
+[
+  {
+    "id": "note-1",
+    "title": "MDN Web Docs",
+    "description": "Mozilla 维护的 Web 技术文档，HTML、CSS、JavaScript 权威参考。",
+    "url": "https://developer.mozilla.org",
+    "category": "文档",
+    "favicon": "https://www.google.com/s2/favicons?domain=developer.mozilla.org&sz=32"
+  },
+  {
+    "id": "note-2",
+    "title": "React 官方文档",
+    "description": "React 官方文档，包含 Hooks、组件、API 完整参考。",
+    "url": "https://react.dev",
+    "category": "前端",
+    "favicon": "https://www.google.com/s2/favicons?domain=react.dev&sz=32"
+  },
+  {
+    "id": "note-3",
+    "title": "TypeScript",
+    "description": "JavaScript 的超集，类型系统让代码更健壮，大型项目必备。",
+    "url": "https://www.typescriptlang.org",
+    "category": "前端",
+    "favicon": "https://www.google.com/s2/favicons?domain=typescriptlang.org&sz=32"
+  }
+]

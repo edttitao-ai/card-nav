@@ -1,0 +1,26 @@
+[
+  {
+    "id": "book-1",
+    "title": "知乎",
+    "description": "中文社区问答平台，涵盖科技、职场、生活等多领域内容。",
+    "url": "https://www.zhihu.com",
+    "category": "阅读",
+    "favicon": "https://www.google.com/s2/favicons?domain=zhihu.com&sz=32"
+  },
+  {
+    "id": "book-2",
+    "title": "小红书",
+    "description": "生活方式分享社区，美妆、旅行、美食、生活方式内容丰富。",
+    "url": "https://www.xiaohongshu.com",
+    "category": "阅读",
+    "favicon": "https://www.google.com/s2/favicons?domain=xiaohongshu.com&sz=32"
+  },
+  {
+    "id": "book-3",
+    "title": "Bilibili",
+    "description": "国内知名视频平台，有大量技术教程、开源项目演示视频。",
+    "url": "https://www.bilibili.com",
+    "category": "视频",
+    "favicon": "https://www.google.com/s2/favicons?domain=bilibili.com&sz=32"
+  }
+]
