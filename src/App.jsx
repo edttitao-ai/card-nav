@@ -211,7 +211,7 @@ export default function App() {
       ]).then(([sidebarData, files]) => {
         const sidebarMap = {}
         sidebarData.forEach(item => { sidebarMap[item.id] = item.label })
-        const dataFiles = files.filter(f => f !== 'sidebar' && f !== 'stats' && f !== 'dashboard' && f !== 'favorites' && f !== 'logs')
+        const dataFiles = files.filter(f => f !== 'sidebar' && f !== 'stats' && f !== 'dashboard' && f !== 'favorites' && f !== 'logs' && f !== 'clicks')
         return Promise.all(dataFiles.map(f =>
             fetch(`${API_BASE}/data/${f}`)
                 .then(res => res.json())
@@ -435,7 +435,7 @@ export default function App() {
                               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                               {/* 分类统计 */}
                               <section className="rounded-2xl p-4" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
-                                <h2 className="text-sm font-semibold pb-3 mb-3" style={{ color: '#8c7e72', borderBottom: '1px solid #ede9e1' }}>栏目网站数量</h2>
+                                <h2 className="text-base font-bold pb-3 mb-3" style={{ color: '#3d3831', borderBottom: '1px solid #ede9e1' }}>栏目网站数量</h2>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                   {categoryStats.map((cat, i) => {
                                     const max = Math.max(...categoryStats.map(c => c.count))
@@ -456,7 +456,7 @@ export default function App() {
                               {/* 卡片点击排行榜 */}
                               {clickRanking.length > 0 && (
                                 <section className="rounded-2xl p-4" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
-                                  <h2 className="text-sm font-semibold pb-3 mb-3" style={{ color: '#8c7e72', borderBottom: '1px solid #ede9e1' }}>卡片点击 Top5 排行</h2>
+                                  <h2 className="text-base font-bold pb-3 mb-3" style={{ color: '#3d3831', borderBottom: '1px solid #ede9e1' }}>卡片点击 Top5 排行</h2>
                                   <div className="space-y-2">
                                     {(() => {
                                       const maxCount = clickRanking[0]?.count || 1
@@ -486,7 +486,7 @@ export default function App() {
                                                 }
                                               }}
                                             />
-                                            <div className="text-sm font-medium truncate" style={{ color: '#3d3831' }}>{item.cardTitle}</div>
+                                            <div className="text-base font-bold truncate" style={{ color: '#3d3831' }}>{item.cardTitle}</div>
                                             <span className="px-2 py-0.5 rounded text-xs shrink-0" style={{ background: 'rgba(192, 97, 42, 0.08)', color: '#c0612a' }}>
                                               {item.category || item.sidebarLabel}
                                             </span>

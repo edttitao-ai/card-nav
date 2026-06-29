@@ -38,7 +38,7 @@ const TrendChart = ({ data }) => {
 
   return (
     <section className="rounded-2xl p-4" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
-      <h2 className="text-sm font-semibold pb-3 mb-3" style={{ color: '#8c7e72', borderBottom: '1px solid #ede9e1' }}>近7天访问趋势</h2>
+      <h2 className="text-base font-bold pb-3 mb-3" style={{ color: '#3d3831', borderBottom: '1px solid #ede9e1' }}>近7天访问趋势</h2>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" style={{ display: 'block', overflow: 'visible' }}>
         <defs>
           <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
