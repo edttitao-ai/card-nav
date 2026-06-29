@@ -2,7 +2,7 @@ import { useRef, useCallback, useState } from 'react'
 
 const DEFAULT_FAVICON = '/icon/mengyou.png'
 
-export default function BentoCard({ card, isFocused, size = 'normal' }) {
+export default function BentoCard({ card, isFocused, size = 'normal', isFavorited = false, inFavorites = false }) {
   const [imgError, setImgError] = useState(false)
   const cardRef = useRef(null)
 
@@ -43,6 +43,11 @@ export default function BentoCard({ card, isFocused, size = 'normal' }) {
         )}
         <span className="card-category">{card.category}</span>
       </div>
+      {isFavorited && !inFavorites && (
+        <span className="absolute top-4 right-4" style={{ color: '#c0612a' }}>
+          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 14.27l-4.77 2.45.91-5.33-3.87-3.77 5.34-.78L10 2z"/></svg>
+        </span>
+      )}
 
       <h2 className="card-title">{card.title}</h2>
 

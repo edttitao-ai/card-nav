@@ -1,0 +1,22 @@
+[
+  {
+    "title": "个人 CSDN博客",
+    "description": "个人的CSDN网址",
+    "url": "https://blog.csdn.net/tao9066?spm=1000.2115.3001.5343",
+    "category": "文档",
+    "favicon": "https://www.google.com/s2/favicons?domain=blog.csdn.net&sz=32",
+    "id": "1782641863581-n2da1go",
+    "pinned": true,
+    "favoriteId": 1782705421490
+  },
+  {
+    "title": "个人markdown仓库",
+    "description": "个人markdown仓库 网页，存放自己的个人md文件",
+    "url": "http://119.29.90.80:3001/",
+    "category": "前端",
+    "favicon": "https://www.google.com/s2/favicons?domain=119.29.90.80&sz=32",
+    "id": "1782638741733-syfohhe",
+    "pinned": true,
+    "favoriteId": 1782705499820
+  }
+]

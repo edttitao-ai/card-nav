@@ -104,7 +104,7 @@
   .bento-card:hover::before { opacity: 1; }
 
   .card-category {
-    @apply inline-block text-[10px] uppercase tracking-widest font-semibold mb-3;
+    @apply inline-block text-xs uppercase tracking-wider font-semibold mb-3;
     color: rgba(192, 97, 42, 0.65);
   }
 

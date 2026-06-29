@@ -14,6 +14,8 @@ const DEFAULT_SIDEBAR = [
 
 const DEFAULT_CATEGORIES = ['前端', '后端', 'DevOps', '工具', '视频', '阅读', '文档', 'AI', '设计', '生活', '学习', '工作', '金融', '社区']
 
+const FAVORITES_ITEM = { id: 'favorites', label: '收藏夹', icon: 'star' }
+
 const Icon = ({ name, className = '' }) => {
   const icons = {
     dashboard: <svg viewBox="0 0 20 20" fill="none" className={className}><rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/></svg>,
@@ -25,11 +27,13 @@ const Icon = ({ name, className = '' }) => {
     menu: <svg viewBox="0 0 20 20" fill="none" className={className}><path d="M4 6h12M4 10h12M4 14h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>,
     close: <svg viewBox="0 0 20 20" fill="none" className={className}><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>,
     plus: <svg viewBox="0 0 20 20" fill="none" className={className}><path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    star: <svg viewBox="0 0 20 20" fill="none" className={className}><path d="M10 2l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 14.27l-4.77 2.45.91-5.33-3.87-3.77 5.34-.78L10 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>,
   }
   return icons[name] || null
 }
 
 function Sidebar({ isOpen, onClose, items, activeItem, onSelectItem, onEdit }) {
+  const favoritesItem = FAVORITES_ITEM
   return (
     <>
       {isOpen && <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden" onClick={onClose} />}
@@ -37,32 +41,46 @@ function Sidebar({ isOpen, onClose, items, activeItem, onSelectItem, onEdit }) {
         <div className="h-16 flex items-center justify-between px-5" style={{ borderBottom: '1px solid #ede9e1' }}>
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center" >
-              <img src="/icon/zhaoshou.svg" alt="" className="w-4 h-4" style={{ color: '#c0612a' }} />
+              <img src="/icon/zhaoshou.svg" alt="" className="w-5 h-5" style={{ color: '#c0612a' }} />
             </div>
-            <span className="text-sm font-semibold tracking-tight" style={{ color: '#3d3831' }}>涛的导航站</span>
+            <span className="text-base font-bold tracking-tight" style={{ color: '#3d3831', textShadow: '0 1px 2px rgba(192, 97, 42, 0.1)' }}>涛的导航站</span>
           </div>
           <button onClick={onClose} className="lg:hidden p-2 rounded-lg transition-colors" style={{ color: '#8c7e72' }} aria-label="关闭侧边栏"><Icon name="close" className="w-5 h-5" /></button>
         </div>
-        <nav className="flex-1 py-4 px-3 overflow-y-auto">
+        <nav className="flex-1 py-4 px-3 overflow-y-auto flex flex-col">
           <ul className="space-y-1">
-            {items.map(item => (
-              <li key={item.id} className="group relative">
-                <button
-                  onClick={() => onSelectItem(item.id)}
-                  onMouseEnter={e => { if (activeItem !== item.id) e.currentTarget.style.background = 'rgba(192, 97, 42, 0.14)' }}
-                  onMouseLeave={e => { if (activeItem !== item.id) e.currentTarget.style.background = 'transparent' }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150"
-                  style={{ background: activeItem === item.id ? 'rgba(192, 97, 42, 0.08)' : 'transparent', color: activeItem === item.id ? '#c0612a' : '#5c5049', fontWeight: activeItem === item.id ? 500 : 400 }}
-                >
-                  <Icon name={item.icon || item.id} className="w-5 h-5 shrink-0" />
-                  <span>{item.label}</span>
-                </button>
-                <button onClick={e => { e.stopPropagation(); onEdit(item) }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(192, 97, 42, 0.14)'; e.currentTarget.style.color = '#c0612a' }} onMouseLeave={e => { e.currentTarget.style.background = '#faf8f4'; e.currentTarget.style.color = '#c9c0b4' }} className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1 rounded transition-all" style={{ color: '#c9c0b4', background: '#faf8f4' }} aria-label="编辑栏目" title="编辑栏目">
-                  <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="none"><path d="M14.5 3.5L16.5 5.5M3 17l2-6 8.5-8.5a2.12 2.12 0 0 1 3 3L8 14l-6 2 2-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </button>
-              </li>
-            ))}
+            <li>
+              <button
+                onClick={() => onSelectItem(favoritesItem.id)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150"
+                style={{ background: activeItem === favoritesItem.id ? 'rgba(192, 97, 42, 0.08)' : 'transparent', color: activeItem === favoritesItem.id ? '#c0612a' : '#5c5049', fontWeight: activeItem === favoritesItem.id ? 500 : 400 }}
+              >
+                <Icon name={favoritesItem.icon} className="w-5 h-5 shrink-0" />
+                <span>{favoritesItem.label}</span>
+              </button>
+            </li>
           </ul>
+          <div className="mt-3">
+            <ul className="space-y-1 flex-1">
+              {items.map(item => (
+                <li key={item.id} className="group relative">
+                  <button
+                    onClick={() => onSelectItem(item.id)}
+                    onMouseEnter={e => { if (activeItem !== item.id) e.currentTarget.style.background = 'rgba(192, 97, 42, 0.14)' }}
+                    onMouseLeave={e => { if (activeItem !== item.id) e.currentTarget.style.background = 'transparent' }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150"
+                    style={{ background: activeItem === item.id ? 'rgba(192, 97, 42, 0.08)' : 'transparent', color: activeItem === item.id ? '#c0612a' : '#5c5049', fontWeight: activeItem === item.id ? 500 : 400 }}
+                  >
+                    <Icon name={item.icon || item.id} className="w-5 h-5 shrink-0" />
+                    <span>{item.label}</span>
+                  </button>
+                  <button onClick={e => { e.stopPropagation(); onEdit(item) }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(192, 97, 42, 0.14)'; e.currentTarget.style.color = '#c0612a' }} onMouseLeave={e => { e.currentTarget.style.background = '#faf8f4'; e.currentTarget.style.color = '#c9c0b4' }} className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1 rounded transition-all" style={{ color: '#c9c0b4', background: '#faf8f4' }} aria-label="编辑栏目" title="编辑栏目">
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="none"><path d="M14.5 3.5L16.5 5.5M3 17l2-6 8.5-8.5a2.12 2.12 0 0 1 3 3L8 14l-6 2 2-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
 
       </aside>
@@ -88,12 +106,22 @@ export default function App() {
   const [cards, setCards] = useState([])
   const [loading, setLoading] = useState(false)
   const [stats, setStats] = useState(null)
+  const [categoryStats, setCategoryStats] = useState([])
+  const [favorites, setFavorites] = useState([])
 
   // 加载左侧栏目数据
   useEffect(() => {
     fetch(`${API_BASE}/data/sidebar`)
       .then(res => res.json())
       .then(data => { if (Array.isArray(data)) setSidebarItems(data) })
+      .catch(() => {})
+  }, [])
+
+  // 加载收藏夹数据
+  useEffect(() => {
+    fetch(`${API_BASE}/data/favorites`)
+      .then(res => res.json())
+      .then(data => setFavorites(Array.isArray(data) ? data : []))
       .catch(() => {})
   }, [])
 
@@ -114,6 +142,31 @@ export default function App() {
           .then(data => setStats(data))
           .catch(() => {})
       }
+      // 获取真实分类统计
+      Promise.all([
+        fetch(`${API_BASE}/data/sidebar`).then(res => res.json()),
+        fetch(`${API_BASE}/files`).then(res => res.json()),
+      ]).then(([sidebarData, files]) => {
+        const sidebarMap = {}
+        sidebarData.forEach(item => { sidebarMap[item.id] = item.label })
+        const dataFiles = files.filter(f => f !== 'sidebar' && f !== 'stats' && f !== 'dashboard' && f !== 'favorites')
+        return Promise.all(dataFiles.map(f =>
+          fetch(`${API_BASE}/data/${f}`)
+            .then(res => res.json())
+            .then(data => ({
+              name: sidebarMap[f] || f,
+              count: Array.isArray(data) ? data.length : 0
+            }))
+            .catch(() => ({ name: sidebarMap[f] || f, count: 0 }))
+        ))
+      }).then(results => setCategoryStats(results.filter(r => r.count > 0)))
+        .catch(() => {})
+      return
+    }
+    if (activeSidebarItem === 'favorites') {
+      setCards(favorites.map(f => ({ ...f, pinned: false })))
+      setSearch('')
+      setActiveCategory('全部')
       return
     }
     setLoading(true)
@@ -209,6 +262,21 @@ export default function App() {
     const newCards = cards.map(c => c.id === id ? { ...c, pinned: !c.pinned } : c)
     saveCards(newCards)
   }
+  const handleToggleFavorite = card => {
+    const isFavorited = favorites.some(f => f.id === card.id)
+    let newFavorites
+    if (isFavorited) {
+      newFavorites = favorites.filter(f => f.id !== card.id)
+    } else {
+      newFavorites = [...favorites, { ...card, favoriteId: Date.now() }]
+    }
+    setFavorites(newFavorites)
+    fetch(`${API_BASE}/data/favorites`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newFavorites),
+    }).catch(console.error)
+  }
 
   const handleAddSidebarItem = () => { setEditingSidebarItem(null); setSidebarModalOpen(true) }
   const handleEditSidebarItem = item => { setEditingSidebarItem(item); setSidebarModalOpen(true) }
@@ -257,16 +325,16 @@ export default function App() {
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     <StatsCard title="总访问量" value={stats.totalVisits.toLocaleString()} subtitle="累计浏览次数" accent />
                     <StatsCard title="本周访问" value={stats.last7Days.reduce((s, d) => s + d.count, 0)} subtitle="最近7天" />
-                    <StatsCard title="链接总数" value={stats.categories.reduce((s, c) => s + c.count, 0)} subtitle="各分类合计" />
+                    <StatsCard title="链接总数" value={categoryStats.reduce((s, c) => s + c.count, 0)} subtitle="各分类合计" />
                     <StatsCard title="分类数量" value={stats.categories.length} subtitle="活跃分类" />
                   </div>
 
                   {/* 分类统计 */}
                   <section>
-                    <h2 className="text-sm font-semibold mb-4" style={{ color: '#8c7e72' }}>分类链接数量</h2>
+                    <h2 className="text-sm font-semibold mb-4" style={{ color: '#8c7e72' }}>栏目网站数量</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {stats.categories.map((cat, i) => {
-                        const max = Math.max(...stats.categories.map(c => c.count))
+                      {categoryStats.map((cat, i) => {
+                        const max = Math.max(...categoryStats.map(c => c.count))
                         const width = max > 0 ? (cat.count / max) * 100 : 0
                         return (
                           <div key={i} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
@@ -291,7 +359,7 @@ export default function App() {
             <>
               <div className="flex items-start justify-between mb-10">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: '#3d3831' }}>{currentSidebarItem?.label || '导航站'}</h1>
+                  <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: '#3d3831' }}>{activeSidebarItem === 'favorites' ? '收藏夹' : (currentSidebarItem?.label || '导航站')}</h1>
                   <p className="text-sm" style={{ color: '#b5ada3' }}>{filtered.length} 个链接</p>
                 </div>
               </div>
@@ -308,7 +376,7 @@ export default function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" role="list" aria-label="链接列表">
                   {filtered.map((card, i) => (
                     <div key={card.id} data-card-id={card.id} className="reveal" style={{ animationDelay: Math.min(i * 40, 320) + 'ms' }} role="listitem">
-                      <BentoCard key={card.id} card={card} isFocused={focusedIndex === i} />
+                      <BentoCard key={card.id} card={card} isFocused={focusedIndex === i} isFavorited={favorites.some(f => f.id === card.id)} inFavorites={activeSidebarItem === 'favorites'} />
                     </div>
                   ))}
                 </div>
@@ -326,7 +394,7 @@ export default function App() {
         </main>
       </div>
       <CardModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSave={handleSaveCard} onDelete={handleDeleteCard} card={editingCard} categories={categories} />
-      {contextMenu && <ContextMenu x={contextMenu.x} y={contextMenu.y} card={contextMenu.card} onClose={() => setContextMenu(null)} onEdit={handleEditCard} onDelete={handleDeleteCard} onAdd={handleAddCard} onTogglePin={handleTogglePin} />}
+      {contextMenu && <ContextMenu x={contextMenu.x} y={contextMenu.y} card={contextMenu.card} onClose={() => setContextMenu(null)} onEdit={handleEditCard} onDelete={handleDeleteCard} onAdd={handleAddCard} onTogglePin={handleTogglePin} onToggleFavorite={handleToggleFavorite} isFavorited={contextMenu.card ? favorites.some(f => f.id === contextMenu.card.id) : false} />}
       <SidebarModal isOpen={sidebarModalOpen} onClose={() => setSidebarModalOpen(false)} onSave={handleSaveSidebarItem} onDelete={handleDeleteSidebarItem} item={editingSidebarItem} />
       {sidebarContextMenu && (
         <SidebarContextMenu

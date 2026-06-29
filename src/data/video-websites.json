@@ -1,0 +1,26 @@
+[
+  {
+    "title": "B站",
+    "description": "学习网站",
+    "url": "https://www.bilibili.com/",
+    "category": "生活",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.bilibili.com&sz=32",
+    "id": "1782704226214-fkam91k"
+  },
+  {
+    "title": "youtube",
+    "description": "国外油管视频网站",
+    "url": "https://www.youtube.com/",
+    "category": "视频",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.youtube.com&sz=32",
+    "id": "1782704697407-s4je8n9"
+  },
+  {
+    "title": "爱奇艺",
+    "description": "国内综艺视频网站",
+    "url": "https://www.iqiyi.com/",
+    "category": "视频",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.iqiyi.com&sz=32",
+    "id": "1782704829491-7dy24u7"
+  }
+]

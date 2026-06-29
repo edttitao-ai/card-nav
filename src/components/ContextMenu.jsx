@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import ConfirmDialog from './ConfirmDialog.jsx'
 
-export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onAdd, onTogglePin }) {
+export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onAdd, onTogglePin, onToggleFavorite, isFavorited }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const menuRef = useRef(null)
 
@@ -74,6 +74,17 @@ export default function ContextMenu({ x, y, card, onClose, onEdit, onDelete, onA
                 <path d="M12 4l1 3h3l-2.5 2 1 3-2.5-1.5-2.5 1.5 1-3L8 7h3l1-3z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               {card.pinned ? '取消置顶' : '置顶'}
+            </button>
+            <button
+              style={btnStyle}
+              onClick={() => { onToggleFavorite(card); onClose() }}
+              onMouseEnter={e => e.target.style.background = '#faf8f4'}
+              onMouseLeave={e => e.target.style.background = 'transparent'}
+            >
+              <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" style={{color: isFavorited ? '#c0612a' : '#8c7e72'}}>
+                <path d="M10 2l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 14.27l-4.77 2.45.91-5.33-3.87-3.77 5.34-.78L10 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill={isFavorited ? '#c0612a' : 'none'}/>
+              </svg>
+              {isFavorited ? '取消收藏' : '收藏'}
             </button>
             <button
               style={btnStyle}
