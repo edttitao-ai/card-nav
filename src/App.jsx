@@ -6,6 +6,7 @@ import SidebarModal from './components/SidebarModal.jsx'
 import SidebarContextMenu from './components/SidebarContextMenu.jsx'
 import StatsCard from './components/StatsCard.jsx'
 import LogList from './components/LogList.jsx'
+import TrendChart from './components/TrendChart.jsx'
 
 const API_BASE = '/api'
 
@@ -32,82 +33,6 @@ const Icon = ({ name, className = '' }) => {
     logs: <svg viewBox="0 0 20 20" fill="none" className={className}><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M3 7h14M7 7v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>,
   }
   return icons[name] || null
-}
-
-const TrendChart = ({ data }) => {
-  if (!data || data.length === 0) return null
-  const W = 600, H = 160, PL = 12, PR = 12, PT = 12, PB = 32
-  const chartW = W - PL - PR, chartH = H - PT - PB
-  const maxVal = Math.max(...data.map(d => d.count), 1)
-
-  // Normalize points
-  const pts = data.map((d, i) => ({
-    x: PL + (i / (data.length - 1 || 1)) * chartW,
-    y: PT + chartH - (d.count / maxVal) * chartH,
-    label: d.date,
-    count: d.count,
-  }))
-
-  // Smooth curve (catmull-rom to bezier)
-  const smoothPath = (pts) => {
-    if (pts.length < 2) return ''
-    let d = `M ${pts[0].x},${pts[0].y}`
-    for (let i = 0; i < pts.length - 1; i++) {
-      const p0 = pts[Math.max(i - 1, 0)]
-      const p1 = pts[i]
-      const p2 = pts[i + 1]
-      const p3 = pts[Math.min(i + 2, pts.length - 1)]
-      const cp1x = p1.x + (p2.x - p0.x) / 6
-      const cp1y = p1.y + (p2.y - p0.y) / 6
-      const cp2x = p2.x - (p3.x - p1.x) / 6
-      const cp2y = p2.y - (p3.y - p1.y) / 6
-      d += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`
-    }
-    return d
-  }
-
-  const lineD = smoothPath(pts)
-  const areaD = lineD + ` L ${pts[pts.length - 1].x},${PT + chartH} L ${pts[0].x},${PT + chartH} Z`
-
-  const gradId = 'trendGrad'
-  const todayLabel = data[data.length - 1]?.date || ''
-  const maxCount = maxVal
-
-  return (
-    <section className="rounded-2xl p-4" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
-      <h2 className="text-sm font-semibold pb-3 mb-3" style={{ color: '#8c7e72', borderBottom: '1px solid #ede9e1' }}>近7天访问趋势</h2>
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" style={{ display: 'block', overflow: 'visible' }}>
-        <defs>
-          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#c0612a" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#c0612a" stopOpacity="0.02" />
-          </linearGradient>
-        </defs>
-        {/* Y axis grid lines */}
-        {[0, 0.25, 0.5, 0.75, 1].map((frac, i) => {
-          const y = PT + chartH * (1 - frac)
-          const val = Math.round(maxCount * frac)
-          return (
-            <g key={i}>
-              <line x1={PL} y1={y} x2={PL + chartW} y2={y} stroke="#ede9e1" strokeWidth="1" />
-              <text x={PL - 6} y={y + 4} textAnchor="end" fontSize="10" fill="#c9c0b4">{val}</text>
-            </g>
-          )
-        })}
-        {/* Area fill */}
-        <path d={areaD} fill={`url(#${gradId})`} />
-        {/* Line */}
-        <path d={lineD} fill="none" stroke="#c0612a" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
-        {/* Dots & X labels */}
-        {pts.map((pt, i) => (
-          <g key={i}>
-            <circle cx={pt.x} cy={pt.y} r={i === pts.length - 1 ? 5 : 3.5} fill={i === pts.length - 1 ? '#c0612a' : '#ffffff'} stroke="#c0612a" strokeWidth="2" />
-            <text x={pt.x} y={PT + chartH + 16} textAnchor="middle" fontSize="10" fill="#c9c0b4">{pt.label}</text>
-          </g>
-        ))}
-      </svg>
-    </section>
-  )
 }
 
 function Sidebar({ isOpen, onClose, items, activeItem, onSelectItem, onEdit }) {
@@ -579,6 +504,12 @@ export default function App() {
                                 </section>
                               )}
                               </div>
+
+                              {stats && stats.last7Days && (
+                                <div className="mt-6">
+                                  <TrendChart data={stats.last7Days} />
+                                </div>
+                              )}
                             </>
                         )}
                       </>
