@@ -2,9 +2,25 @@ import { useRef, useCallback, useState } from 'react'
 
 const DEFAULT_FAVICON = '/icon/mengyou.png'
 
-export default function BentoCard({ card, isFocused, size = 'normal', isFavorited = false, inFavorites = false }) {
+export default function BentoCard({ card, isFocused, size = 'normal', isFavorited = false, inFavorites = false, sidebarItem = null }) {
   const [imgError, setImgError] = useState(false)
   const cardRef = useRef(null)
+
+  // 点击统计
+  const handleClick = () => {
+    fetch('/api/click', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cardId: card.id,
+        cardTitle: card.title,
+        sidebarId: sidebarItem?.id || '',
+        sidebarLabel: sidebarItem?.label || '',
+        category: card.category || '',
+        favicon: card.favicon || ''
+      })
+    }).catch(() => {})
+  }
 
   const handleMouseMove = useCallback(e => {
     const el = cardRef.current
@@ -34,6 +50,7 @@ export default function BentoCard({ card, isFocused, size = 'normal', isFavorite
       className={`${cardClass} flex flex-col h-full ${isFocused ? 'focused' : ''} ${card.pinned ? 'bordered-pinned' : ''}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
     >
       <div className="flex items-center gap-2 mb-1">
         {card.pinned && (

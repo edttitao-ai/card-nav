@@ -11,7 +11,6 @@ app.use(express.json())
 
 const DATA_DIR = path.join(__dirname, 'src', 'data')
 
-// 获取所有数据文件列表
 app.get('/api/files', (req, res) => {
   try {
     const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith('.json'))
@@ -21,9 +20,8 @@ app.get('/api/files', (req, res) => {
   }
 })
 
-// 读取指定文件
 app.get('/api/data/:name', (req, res) => {
-  const filePath = path.join(DATA_DIR, `${req.params.name}.json`)
+  const filePath = path.join(DATA_DIR, req.params.name + '.json')
   try {
     const data = fs.readFileSync(filePath, 'utf-8')
     res.json(JSON.parse(data))
@@ -32,14 +30,11 @@ app.get('/api/data/:name', (req, res) => {
   }
 })
 
-// 访问统计（累加访问量）
 app.post('/api/data/stats', (req, res) => {
   const filePath = path.join(DATA_DIR, 'stats.json')
   try {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-    // 累加总访问量
     data.totalVisits = (data.totalVisits || 0) + 1
-    // 更新当天访问量
     const today = new Date().toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }).replace('/', '-')
     const todayEntry = data.last7Days.find(d => d.date === today)
     if (todayEntry) {
@@ -55,9 +50,8 @@ app.post('/api/data/stats', (req, res) => {
   }
 })
 
-// 保存指定文件
 app.put('/api/data/:name', (req, res) => {
-  const filePath = path.join(DATA_DIR, `${req.params.name}.json`)
+  const filePath = path.join(DATA_DIR, req.params.name + '.json')
   try {
     fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2), 'utf-8')
     res.json({ success: true })
@@ -66,7 +60,6 @@ app.put('/api/data/:name', (req, res) => {
   }
 })
 
-// 追加日志记录
 app.post('/api/data/:name', (req, res) => {
   if (req.params.name !== 'logs') {
     return res.status(400).json({ error: '仅支持 logs' })
@@ -77,7 +70,7 @@ app.post('/api/data/:name', (req, res) => {
     if (fs.existsSync(filePath)) {
       logs = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
     }
-    logs.unshift(req.body) // 新记录添加到开头
+    logs.unshift(req.body)
     fs.writeFileSync(filePath, JSON.stringify(logs, null, 2), 'utf-8')
     res.json({ success: true })
   } catch (err) {
@@ -85,6 +78,52 @@ app.post('/api/data/:name', (req, res) => {
   }
 })
 
+app.post('/api/click', (req, res) => {
+  const filePath = path.join(DATA_DIR, 'clicks.json')
+  try {
+    let data = []
+    if (fs.existsSync(filePath)) {
+      data = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+    }
+    const { cardId, cardTitle, sidebarId, sidebarLabel, category, favicon } = req.body
+    const existing = data.find(c => c.cardId === cardId)
+    if (existing) {
+      existing.count++
+      existing.updatedAt = new Date().toISOString()
+    } else {
+      data.push({
+        cardId,
+        cardTitle,
+        sidebarId,
+        sidebarLabel,
+        category: category || '',
+        favicon: favicon || '',
+        count: 1,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      })
+    }
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8')
+    res.json({ success: true })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+app.get('/api/clicks', (req, res) => {
+  const filePath = path.join(DATA_DIR, 'clicks.json')
+  try {
+    let data = []
+    if (fs.existsSync(filePath)) {
+      data = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+    }
+    const ranking = data.sort((a, b) => b.count - a.count).slice(0, 10)
+    res.json(ranking)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`)
+  console.log('Server running at http://localhost:' + PORT)
 })

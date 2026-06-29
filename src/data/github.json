@@ -1,12 +1,11 @@
 [
   {
-    "title": "GitHub——个人",
+    "title": "GitHub—-个人",
     "description": "个人的github网址",
     "url": "https://github.com/edttitao-ai?tab=repositories",
     "category": "学习",
     "favicon": "https://www.google.com/s2/favicons?domain=github.com&sz=32",
-    "id": "git-1",
-    "pinned": true
+    "id": "git-1"
   },
   {
     "title": "superpowers",
