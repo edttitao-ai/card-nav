@@ -28,5 +28,15 @@
     "id": "recruitment",
     "label": "招聘网站",
     "icon": "tools"
+  },
+  {
+    "id": "tools",
+    "label": "工具",
+    "icon": "dashboard"
+  },
+  {
+    "id": "video-websites",
+    "label": "视频网站",
+    "icon": "notes"
   }
 ]

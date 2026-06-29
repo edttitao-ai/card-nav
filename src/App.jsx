@@ -5,6 +5,7 @@ import ContextMenu from './components/ContextMenu.jsx'
 import SidebarModal from './components/SidebarModal.jsx'
 import SidebarContextMenu from './components/SidebarContextMenu.jsx'
 import StatsCard from './components/StatsCard.jsx'
+import LogList from './components/LogList.jsx'
 
 const API_BASE = '/api'
 
@@ -28,6 +29,7 @@ const Icon = ({ name, className = '' }) => {
     close: <svg viewBox="0 0 20 20" fill="none" className={className}><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>,
     plus: <svg viewBox="0 0 20 20" fill="none" className={className}><path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>,
     star: <svg viewBox="0 0 20 20" fill="none" className={className}><path d="M10 2l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 14.27l-4.77 2.45.91-5.33-3.87-3.77 5.34-.78L10 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+    logs: <svg viewBox="0 0 20 20" fill="none" className={className}><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M3 7h14M7 7v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>,
   }
   return icons[name] || null
 }
@@ -57,6 +59,16 @@ function Sidebar({ isOpen, onClose, items, activeItem, onSelectItem, onEdit }) {
               >
                 <Icon name={favoritesItem.icon} className="w-5 h-5 shrink-0" />
                 <span>{favoritesItem.label}</span>
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => onSelectItem('logs')}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150"
+                style={{ background: activeItem === 'logs' ? 'rgba(192, 97, 42, 0.08)' : 'transparent', color: activeItem === 'logs' ? '#c0612a' : '#5c5049', fontWeight: activeItem === 'logs' ? 500 : 400 }}
+              >
+                <Icon name="logs" className="w-5 h-5 shrink-0" />
+                <span>日志</span>
               </button>
             </li>
           </ul>
@@ -108,6 +120,7 @@ export default function App() {
   const [stats, setStats] = useState(null)
   const [categoryStats, setCategoryStats] = useState([])
   const [favorites, setFavorites] = useState([])
+  const [logs, setLogs] = useState([])
 
   // 加载左侧栏目数据
   useEffect(() => {
@@ -122,6 +135,14 @@ export default function App() {
     fetch(`${API_BASE}/data/favorites`)
       .then(res => res.json())
       .then(data => setFavorites(Array.isArray(data) ? data : []))
+      .catch(() => {})
+  }, [])
+
+  // 加载日志数据
+  useEffect(() => {
+    fetch(`${API_BASE}/data/logs`)
+      .then(res => res.json())
+      .then(data => setLogs(Array.isArray(data) ? data : []))
       .catch(() => {})
   }, [])
 
@@ -165,6 +186,12 @@ export default function App() {
     }
     if (activeSidebarItem === 'favorites') {
       setCards(favorites.map(f => ({ ...f, pinned: false })))
+      setSearch('')
+      setActiveCategory('全部')
+      return
+    }
+    if (activeSidebarItem === 'logs') {
+      setCards([])
       setSearch('')
       setActiveCategory('全部')
       return
@@ -244,6 +271,27 @@ export default function App() {
 
   const clearFilter = () => { setSearch(''); setActiveCategory('全部') }
 
+  // 添加日志记录
+  const addLog = useCallback((card, action) => {
+    const currentSidebar = sidebarItems.find(i => i.id === activeSidebarItem)
+    const logEntry = {
+      id: `log-${Date.now()}`,
+      ip: '127.0.0.1',
+      sidebarId: activeSidebarItem,
+      sidebarLabel: currentSidebar?.label || '未知',
+      cardTitle: card.title,
+      category: card.category,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    setLogs(prev => [logEntry, ...prev])
+    fetch(`${API_BASE}/data/logs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(logEntry),
+    }).catch(console.error)
+  }, [activeSidebarItem, sidebarItems])
+
   const handleAddCard = () => { setEditingCard(null); setModalOpen(true) }
   const handleEditCard = card => { setEditingCard(card); setModalOpen(true) }
   const handleSaveCard = card => {
@@ -251,6 +299,7 @@ export default function App() {
       const exists = prev.find(c => c.id === card.id)
       const newCards = exists ? prev.map(c => c.id === card.id ? card : c) : [...prev, card]
       saveCards(newCards)
+      addLog(card, exists ? 'update' : 'create')
       return newCards
     })
   }
@@ -354,6 +403,14 @@ export default function App() {
                   <p style={{ color: '#c9c0b4' }}>加载中...</p>
                 </div>
               )}
+            </div>
+          ) : activeSidebarItem === 'logs' ? (
+            <div>
+              <div className="mb-10">
+                <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: '#3d3831' }}>日志</h1>
+                <p className="text-sm" style={{ color: '#8c7e72' }}>{logs.length} 条记录</p>
+              </div>
+              <LogList logs={logs} sidebarItems={sidebarItems} />
             </div>
           ) : (
             <>

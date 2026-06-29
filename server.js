@@ -66,6 +66,25 @@ app.put('/api/data/:name', (req, res) => {
   }
 })
 
+// 追加日志记录
+app.post('/api/data/:name', (req, res) => {
+  if (req.params.name !== 'logs') {
+    return res.status(400).json({ error: '仅支持 logs' })
+  }
+  const filePath = path.join(DATA_DIR, 'logs.json')
+  try {
+    let logs = []
+    if (fs.existsSync(filePath)) {
+      logs = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+    }
+    logs.unshift(req.body) // 新记录添加到开头
+    fs.writeFileSync(filePath, JSON.stringify(logs, null, 2), 'utf-8')
+    res.json({ success: true })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`)
 })
