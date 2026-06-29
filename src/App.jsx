@@ -121,6 +121,21 @@ export default function App() {
   const [categoryStats, setCategoryStats] = useState([])
   const [favorites, setFavorites] = useState([])
   const [logs, setLogs] = useState([])
+  const [backendStatus, setBackendStatus] = useState('checking') // checking | online | offline
+
+  // 检测后端状态
+  useEffect(() => {
+    const checkBackend = () => {
+      fetch(`${API_BASE}/files`, { signal: AbortSignal.timeout(5000) })
+        .then(res => {
+          if (res.ok) setBackendStatus('online')
+        })
+        .catch(() => setBackendStatus('offline'))
+    }
+    checkBackend()
+    const interval = setInterval(checkBackend, 3600000) // 每小时检测一次
+    return () => clearInterval(interval)
+  }, [])
 
   // 加载左侧栏目数据
   useEffect(() => {
@@ -368,8 +383,21 @@ export default function App() {
                 <p className="text-sm" style={{ color: '#8c7e72' }}>网站访问与链接统计</p>
               </div>
 
-              {stats ? (
+              {(stats || backendStatus === 'offline') ? (
                 <>
+                  {/* 后端状态 */}
+                  <div className="mb-8 flex items-center gap-3">
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm" style={{
+                      background: backendStatus === 'offline' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)',
+                      color: backendStatus === 'offline' ? '#dc2626' : '#16a34a'
+                    }}>
+                      <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: backendStatus === 'offline' ? '#ef4444' : '#22c55e' }} />
+                      {backendStatus === 'checking' ? '检测中...' : backendStatus === 'offline' ? '后端服务断开' : '后端服务正常'}
+                    </div>
+                  </div>
+
+                  {stats && (
+                  <>
                   {/* 顶部统计卡片 */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     <StatsCard title="总访问量" value={stats.totalVisits.toLocaleString()} subtitle="累计浏览次数" accent />
@@ -397,6 +425,8 @@ export default function App() {
                       })}
                     </div>
                   </section>
+                  </>
+                  )}
                 </>
               ) : (
                 <div className="text-center py-16">
