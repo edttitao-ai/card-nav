@@ -4,9 +4,9 @@
     "cardTitle": "个人markdown仓库",
     "sidebarId": "portfolio",
     "sidebarLabel": "个人 网站",
-    "count": 5,
+    "count": 8,
     "createdAt": "2026-06-29T06:31:31.663Z",
-    "updatedAt": "2026-06-29T08:21:22.631Z"
+    "updatedAt": "2026-06-29T09:40:14.518Z"
   },
   {
     "cardId": "git-1",
@@ -45,9 +45,9 @@
     "sidebarId": "learning",
     "sidebarLabel": "学习",
     "category": "后端",
-    "count": 1,
+    "count": 2,
     "createdAt": "2026-06-29T07:05:02.770Z",
-    "updatedAt": "2026-06-29T07:05:02.770Z"
+    "updatedAt": "2026-06-29T09:40:02.981Z"
   },
   {
     "cardId": "1782638652619-937hahl",
@@ -78,5 +78,49 @@
     "count": 3,
     "createdAt": "2026-06-29T07:09:29.669Z",
     "updatedAt": "2026-06-29T07:13:24.096Z"
+  },
+  {
+    "cardId": "1782639612386-cehbciw",
+    "cardTitle": "编程导航",
+    "sidebarId": "learning",
+    "sidebarLabel": "学习",
+    "category": "后端",
+    "favicon": "https://www.google.com/s2/favicons?domain=www.codefather.cn&sz=32",
+    "count": 1,
+    "createdAt": "2026-06-29T09:40:05.005Z",
+    "updatedAt": "2026-06-29T09:40:05.005Z"
+  },
+  {
+    "cardId": "1782639663975-d1y7ien",
+    "cardTitle": "叶哥的技术分享",
+    "sidebarId": "learning",
+    "sidebarLabel": "学习",
+    "category": "学习",
+    "favicon": "https://www.google.com/s2/favicons?domain=linuxeasy.site&sz=32",
+    "count": 1,
+    "createdAt": "2026-06-29T09:40:06.162Z",
+    "updatedAt": "2026-06-29T09:40:06.162Z"
+  },
+  {
+    "cardId": "1782647358591-tbvxxng",
+    "cardTitle": "廖雪峰的网站",
+    "sidebarId": "learning",
+    "sidebarLabel": "学习",
+    "category": "学习",
+    "favicon": "https://www.google.com/s2/favicons?domain=liaoxuefeng.com&sz=32",
+    "count": 1,
+    "createdAt": "2026-06-29T09:40:07.816Z",
+    "updatedAt": "2026-06-29T09:40:07.816Z"
+  },
+  {
+    "cardId": "1782641863581-n2da1go",
+    "cardTitle": "个人 CSDN博客",
+    "sidebarId": "portfolio",
+    "sidebarLabel": "个人 网站",
+    "category": "文档",
+    "favicon": "https://www.google.com/s2/favicons?domain=blog.csdn.net&sz=32",
+    "count": 3,
+    "createdAt": "2026-06-29T09:40:09.941Z",
+    "updatedAt": "2026-06-29T09:40:12.778Z"
   }
 ]

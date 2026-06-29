@@ -486,8 +486,8 @@ export default function App() {
                                                 }
                                               }}
                                             />
-                                            <div className="text-base font-bold truncate" style={{ color: '#3d3831' }}>{item.cardTitle}</div>
-                                            <span className="px-2 py-0.5 rounded text-xs shrink-0" style={{ background: 'rgba(192, 97, 42, 0.08)', color: '#c0612a' }}>
+                                            <div className="text-sm sm:text-base font-bold truncate" style={{ color: '#3d3831' }}>{item.cardTitle}</div>
+                                            <span className="px-2 py-0.5 rounded text-xs shrink-0 hidden sm:block" style={{ background: 'rgba(192, 97, 42, 0.08)', color: '#c0612a' }}>
                                               {item.category || item.sidebarLabel}
                                             </span>
                                             <div className="flex items-center gap-2 shrink-0">

@@ -15,9 +15,30 @@
     font-family: 'DM Sans', system-ui, sans-serif;
   }
 
-  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar { width: 5px; height: 6px; }
   ::-webkit-scrollbar-track { background: #faf8f4; }
   ::-webkit-scrollbar-thumb { @apply bg-[#ede9e1] rounded-full; }
+
+  /* 日志表格滚动条 */
+  .log-table-scroll::-webkit-scrollbar { height: 8px; }
+  .log-table-scroll::-webkit-scrollbar-track { background: #f0ece4; border-radius: 4px; }
+  .log-table-scroll::-webkit-scrollbar-thumb { background: #c9c0b4; border-radius: 4px; }
+  .log-table-scroll::-webkit-scrollbar-thumb:hover { background: #8c7e72; }
+
+  /* 手机端滚动提示 */
+  .log-table-scroll::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: linear-gradient(to right, transparent, rgba(250, 248, 244, 0.9));
+    pointer-events: none;
+  }
+  @media (min-width: 640px) {
+    .log-table-scroll::after { display: none; }
+  }
 
   ::selection {
     background: rgba(192, 97, 42, 0.15);

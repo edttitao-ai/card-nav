@@ -110,16 +110,16 @@ export default function LogList({ logs, sidebarItems }) {
       {filtered.length > 0 ? (
         <>
           <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #ede9e1', background: '#ffffff' }}>
-            <div className="overflow-x-auto" style={{ maxHeight: 'calc(100vh - 340px)', overflowY: 'auto' }}>
-              <table className="w-full text-sm">
+            <div className="overflow-x-auto" style={{ maxHeight: 'calc(100vh - 340px)', overflowY: 'auto', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'thin', scrollbarColor: '#c9c0b4 transparent' }}>
+              <table className="w-full min-w-[700px] text-sm">
                 <thead className="sticky top-0 z-10">
                   <tr style={{ background: '#faf8f4', borderBottom: '1px solid #ede9e1' }}>
-                    <th className="text-left px-4 py-3 font-medium" style={{ color: '#8c7e72' }}>IP</th>
-                    <th className="text-left px-4 py-3 font-medium hidden sm:table-cell" style={{ color: '#8c7e72' }}>栏目</th>
-                    <th className="text-left px-4 py-3 font-medium" style={{ color: '#8c7e72' }}>卡片标题</th>
-                    <th className="text-left px-4 py-3 font-medium hidden md:table-cell" style={{ color: '#8c7e72' }}>分类</th>
-                    <th className="text-left px-4 py-3 font-medium hidden lg:table-cell" style={{ color: '#8c7e72' }}>创建时间</th>
-                    <th className="text-left px-4 py-3 font-medium hidden lg:table-cell" style={{ color: '#8c7e72' }}>更新时间</th>
+                    <th className="text-left px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#8c7e72' }}>IP</th>
+                    <th className="text-left px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#8c7e72' }}>栏目</th>
+                    <th className="text-left px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#8c7e72' }}>卡片标题</th>
+                    <th className="text-left px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#8c7e72' }}>分类</th>
+                    <th className="text-left px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#8c7e72' }}>创建时间</th>
+                    <th className="text-left px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#8c7e72' }}>更新时间</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -131,20 +131,20 @@ export default function LogList({ logs, sidebarItems }) {
                       onMouseEnter={e => e.currentTarget.style.background = '#faf8f4'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                     >
-                      <td className="px-4 py-3 font-mono text-xs" style={{ color: '#8c7e72' }}>{log.ip}</td>
-                      <td className="px-4 py-3 hidden sm:table-cell">
-                        <span className="px-2 py-1 rounded-md text-xs font-medium" style={{ background: 'rgba(192, 97, 42, 0.08)', color: '#c0612a' }}>
+                      <td className="px-4 py-3 font-mono text-xs whitespace-nowrap" style={{ color: '#8c7e72' }}>{log.ip}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className="px-2 py-1 rounded-md text-xs font-medium whitespace-nowrap" style={{ background: 'rgba(192, 97, 42, 0.08)', color: '#c0612a' }}>
                           {log.sidebarLabel}
                         </span>
                       </td>
-                      <td className="px-4 py-3 font-medium" style={{ color: '#3d3831' }}>{log.cardTitle}</td>
-                      <td className="px-4 py-3 hidden md:table-cell">
-                        <span className="px-2 py-1 rounded-md text-xs" style={{ background: '#f0ece4', color: '#5c5049' }}>
+                      <td className="px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#3d3831' }}>{log.cardTitle}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className="px-2 py-1 rounded-md text-xs whitespace-nowrap" style={{ background: '#f0ece4', color: '#5c5049' }}>
                           {log.category}
                         </span>
                       </td>
-                      <td className="px-4 py-3 hidden lg:table-cell text-xs" style={{ color: '#8c7e72' }}>{formatDate(log.createdAt)}</td>
-                      <td className="px-4 py-3 hidden lg:table-cell text-xs" style={{ color: '#8c7e72' }}>{formatDate(log.updatedAt)}</td>
+                      <td className="px-4 py-3 text-xs whitespace-nowrap" style={{ color: '#8c7e72' }}>{formatDate(log.createdAt)}</td>
+                      <td className="px-4 py-3 text-xs whitespace-nowrap" style={{ color: '#8c7e72' }}>{formatDate(log.updatedAt)}</td>
                     </tr>
                   ))}
                 </tbody>
