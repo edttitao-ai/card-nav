@@ -1,0 +1,59 @@
+{
+  "totalVisits": 1262,
+  "last7Days": [
+    {
+      "date": "06-23",
+      "count": 45
+    },
+    {
+      "date": "06-24",
+      "count": 82
+    },
+    {
+      "date": "06-25",
+      "count": 63
+    },
+    {
+      "date": "06-26",
+      "count": 91
+    },
+    {
+      "date": "06-27",
+      "count": 78
+    },
+    {
+      "date": "06-28",
+      "count": 55
+    },
+    {
+      "date": "06-29",
+      "count": 62
+    }
+  ],
+  "categories": [
+    {
+      "name": "前端",
+      "count": 12
+    },
+    {
+      "name": "后端",
+      "count": 5
+    },
+    {
+      "name": "DevOps",
+      "count": 3
+    },
+    {
+      "name": "工具",
+      "count": 8
+    },
+    {
+      "name": "视频",
+      "count": 4
+    },
+    {
+      "name": "阅读",
+      "count": 6
+    }
+  ]
+}

@@ -32,6 +32,29 @@ app.get('/api/data/:name', (req, res) => {
   }
 })
 
+// 访问统计（累加访问量）
+app.post('/api/data/stats', (req, res) => {
+  const filePath = path.join(DATA_DIR, 'stats.json')
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+    // 累加总访问量
+    data.totalVisits = (data.totalVisits || 0) + 1
+    // 更新当天访问量
+    const today = new Date().toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }).replace('/', '-')
+    const todayEntry = data.last7Days.find(d => d.date === today)
+    if (todayEntry) {
+      todayEntry.count++
+    } else {
+      data.last7Days.push({ date: today, count: 1 })
+      if (data.last7Days.length > 7) data.last7Days.shift()
+    }
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8')
+    res.json(data)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // 保存指定文件
 app.put('/api/data/:name', (req, res) => {
   const filePath = path.join(DATA_DIR, `${req.params.name}.json`)

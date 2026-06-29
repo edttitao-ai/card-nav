@@ -4,6 +4,7 @@ import CardModal from './components/CardModal.jsx'
 import ContextMenu from './components/ContextMenu.jsx'
 import SidebarModal from './components/SidebarModal.jsx'
 import SidebarContextMenu from './components/SidebarContextMenu.jsx'
+import StatsCard from './components/StatsCard.jsx'
 
 const API_BASE = '/api'
 
@@ -86,6 +87,7 @@ export default function App() {
 
   const [cards, setCards] = useState([])
   const [loading, setLoading] = useState(false)
+  const [stats, setStats] = useState(null)
 
   // 加载左侧栏目数据
   useEffect(() => {
@@ -99,6 +101,19 @@ export default function App() {
   useEffect(() => {
     if (activeSidebarItem === 'dashboard') {
       setCards([])
+      // 每次会话只统计一次
+      if (!sessionStorage.getItem('visited')) {
+        sessionStorage.setItem('visited', 'true')
+        fetch(`${API_BASE}/data/stats`, { method: 'POST' })
+          .then(res => res.json())
+          .then(data => setStats(data))
+          .catch(() => {})
+      } else {
+        fetch(`${API_BASE}/data/stats`)
+          .then(res => res.json())
+          .then(data => setStats(data))
+          .catch(() => {})
+      }
       return
     }
     setLoading(true)
@@ -230,71 +245,47 @@ export default function App() {
         </header>
         <main className="max-w-6xl mx-auto px-6 py-12" onKeyDown={handleKeyDown} tabIndex={-1}>
           {activeSidebarItem === 'dashboard' ? (
-            <div className="max-w-2xl">
-              <div className="mb-12">
-                <h1 className="text-4xl font-bold tracking-tight mb-4" style={{ color: '#3d3831' }}>个人导航站</h1>
-                <p className="text-base leading-relaxed" style={{ color: '#8c7e72' }}>
-                  一个简单高效的导航工具，帮助你整理和快速访问常用链接。
-                </p>
+            <div>
+              <div className="mb-10">
+                <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: '#3d3831' }}>数据概览</h1>
+                <p className="text-sm" style={{ color: '#8c7e72' }}>网站访问与链接统计</p>
               </div>
 
-              <div className="space-y-8">
-                <section>
-                  <h2 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: '#c9c0b4' }}>功能特点</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
-                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/></svg>
-                      </div>
-                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>多栏目管理</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>左侧栏目分类管理，右键新增栏目或编辑已有栏目。</p>
-                    </div>
-                    <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
-                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.5"/><path d="M13 13l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                      </div>
-                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>快速搜索</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>按 Ctrl+K 快速聚焦搜索框，输入关键词即时过滤链接。</p>
-                    </div>
-                    <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
-                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      </div>
-                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>置顶收藏</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>右键卡片可置顶，重要链接排在最前，置顶卡片有特殊样式。</p>
-                    </div>
-                    <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(192, 97, 42, 0.1)' }}>
-                        <svg className="w-5 h-5" style={{ color: '#c0612a' }} viewBox="0 0 20 20" fill="none"><path d="M3 6h14M8 6V4h4v2M5 6v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      </div>
-                      <h3 className="text-sm font-semibold mb-1" style={{ color: '#3d3831' }}>右键菜单</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: '#8c7e72' }}>右键空白处新增链接，右键卡片编辑、置顶或删除。</p>
-                    </div>
+              {stats ? (
+                <>
+                  {/* 顶部统计卡片 */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <StatsCard title="总访问量" value={stats.totalVisits.toLocaleString()} subtitle="累计浏览次数" accent />
+                    <StatsCard title="本周访问" value={stats.last7Days.reduce((s, d) => s + d.count, 0)} subtitle="最近7天" />
+                    <StatsCard title="链接总数" value={stats.categories.reduce((s, c) => s + c.count, 0)} subtitle="各分类合计" />
+                    <StatsCard title="分类数量" value={stats.categories.length} subtitle="活跃分类" />
                   </div>
-                </section>
 
-                <section>
-                  <h2 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: '#c9c0b4' }}>使用说明</h2>
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
-                      <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>1</span>
-                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>左侧选择栏目，进入不同链接分类页面</p>
+                  {/* 分类统计 */}
+                  <section>
+                    <h2 className="text-sm font-semibold mb-4" style={{ color: '#8c7e72' }}>分类链接数量</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {stats.categories.map((cat, i) => {
+                        const max = Math.max(...stats.categories.map(c => c.count))
+                        const width = max > 0 ? (cat.count / max) * 100 : 0
+                        return (
+                          <div key={i} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: '#ffffff', border: '1px solid #ede9e1' }}>
+                            <span className="text-sm font-medium w-16 shrink-0" style={{ color: '#3d3831' }}>{cat.name}</span>
+                            <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: '#f0ece4' }}>
+                              <div className="h-full rounded-full transition-all" style={{ width: `${width}%`, background: '#c0612a' }} />
+                            </div>
+                            <span className="text-sm font-semibold w-8 text-right shrink-0" style={{ color: '#c0612a' }}>{cat.count}</span>
+                          </div>
+                        )
+                      })}
                     </div>
-                    <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
-                      <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>2</span>
-                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>右键点击空白区域，新增链接卡片；右键点击栏目区域，新增栏目</p>
-                    </div>
-                    <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
-                      <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>3</span>
-                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>右键点击卡片，可编辑、置顶或删除已有链接</p>
-                    </div>
-                    <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: '#faf8f4', border: '1px solid #ede9e1' }}>
-                      <span className="text-sm font-semibold shrink-0 w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: '#c0612a', color: '#fff' }}>4</span>
-                      <p className="text-sm leading-relaxed" style={{ color: '#5c5049' }}>点击栏目右侧的编辑按钮，可编辑或删除左侧栏目</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
+                  </section>
+                </>
+              ) : (
+                <div className="text-center py-16">
+                  <p style={{ color: '#c9c0b4' }}>加载中...</p>
+                </div>
+              )}
             </div>
           ) : (
             <>
