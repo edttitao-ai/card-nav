@@ -4,9 +4,9 @@
     "cardTitle": "个人markdown仓库",
     "sidebarId": "portfolio",
     "sidebarLabel": "个人 网站",
-    "count": 8,
+    "count": 9,
     "createdAt": "2026-06-29T06:31:31.663Z",
-    "updatedAt": "2026-06-29T09:40:14.518Z"
+    "updatedAt": "2026-06-29T13:55:35.717Z"
   },
   {
     "cardId": "git-1",
@@ -122,5 +122,16 @@
     "count": 3,
     "createdAt": "2026-06-29T09:40:09.941Z",
     "updatedAt": "2026-06-29T09:40:12.778Z"
+  },
+  {
+    "cardId": "1782835202933-7g8ud3b",
+    "cardTitle": "个人奖状档案",
+    "sidebarId": "",
+    "sidebarLabel": "",
+    "category": "工作",
+    "favicon": "https://www.google.com/s2/favicons?domain=119.29.90.80&sz=32",
+    "count": 1,
+    "createdAt": "2026-06-30T16:07:26.540Z",
+    "updatedAt": "2026-06-30T16:07:26.540Z"
   }
 ]

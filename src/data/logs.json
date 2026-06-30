@@ -1,5 +1,15 @@
 [
   {
+    "id": "log-1782835202934",
+    "ip": "127.0.0.1",
+    "sidebarId": "portfolio",
+    "sidebarLabel": "个人 网站",
+    "cardTitle": "个人奖状档案",
+    "category": "工作",
+    "createdAt": "2026-06-30T16:00:02.934Z",
+    "updatedAt": "2026-06-30T16:00:02.934Z"
+  },
+  {
     "id": "log-1782718194918",
     "ip": "127.0.0.1",
     "sidebarId": "github",

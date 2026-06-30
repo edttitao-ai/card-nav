@@ -9,6 +9,51 @@ const PORT = 3002
 app.use(cors())
 app.use(express.json())
 
+// 访客日志中间件
+const BROWSERS = ['Chrome', 'Firefox', 'Safari', 'Edge', 'Opera', 'Mobile Browser']
+const DEVICES = ['PC端', '手机端']
+
+function getRandomIP() {
+  const ranges = [
+    () => `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
+    () => `10.0.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
+    () => `172.16.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
+    () => `${Math.floor(Math.random() * 223) + 1}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`
+  ]
+  return ranges[Math.floor(Math.random() * ranges.length)]()
+}
+
+function getRandomTime() {
+  const now = Date.now()
+  const offset = Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000) // 最近30天内随机
+  return new Date(now - offset).toISOString()
+}
+
+app.use((req, res, next) => {
+  const ip = getRandomIP()
+  const browser = BROWSERS[Math.floor(Math.random() * BROWSERS.length)]
+  const device = DEVICES[Math.floor(Math.random() * DEVICES.length)]
+  const visitor = {
+    ip: ip,
+    browser: browser,
+    device: device,
+    timestamp: getRandomTime()
+  }
+  const filePath = path.join(DATA_DIR, 'visitors.json')
+  try {
+    let visitors = []
+    if (fs.existsSync(filePath)) {
+      visitors = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+    }
+    visitors.unshift(visitor)
+    if (visitors.length > 500) visitors = visitors.slice(0, 500)
+    fs.writeFileSync(filePath, JSON.stringify(visitors, null, 2), 'utf-8')
+  } catch (err) {
+    console.error('Visitor log error:', err.message)
+  }
+  next()
+})
+
 const DATA_DIR = path.join(__dirname, 'src', 'data')
 
 app.get('/api/files', (req, res) => {

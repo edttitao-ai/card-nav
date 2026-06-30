@@ -122,6 +122,7 @@ export default function App() {
   const [categoryStats, setCategoryStats] = useState([])
   const [favorites, setFavorites] = useState([])
   const [logs, setLogs] = useState([])
+  const [visitors, setVisitors] = useState([])
   const [backendStatus, setBackendStatus] = useState('checking') // checking | online | offline
   const [clickRanking, setClickRanking] = useState([])
   const [imgErrors, setImgErrors] = useState({})
@@ -187,6 +188,14 @@ export default function App() {
         .catch(() => {})
   }, [])
 
+  // 加载访客日志数据
+  useEffect(() => {
+    fetch(`${API_BASE}/data/visitors`)
+        .then(res => res.json())
+        .then(data => setVisitors(Array.isArray(data) ? data : []))
+        .catch(() => {})
+  }, [])
+
   // 加载栏目数据
   useEffect(() => {
     if (activeSidebarItem === 'dashboard') {
@@ -211,7 +220,7 @@ export default function App() {
       ]).then(([sidebarData, files]) => {
         const sidebarMap = {}
         sidebarData.forEach(item => { sidebarMap[item.id] = item.label })
-        const dataFiles = files.filter(f => f !== 'sidebar' && f !== 'stats' && f !== 'dashboard' && f !== 'favorites' && f !== 'logs' && f !== 'clicks')
+        const dataFiles = files.filter(f => f !== 'sidebar' && f !== 'stats' && f !== 'dashboard' && f !== 'favorites' && f !== 'logs' && f !== 'clicks' && f !== 'visitors')
         return Promise.all(dataFiles.map(f =>
             fetch(`${API_BASE}/data/${f}`)
                 .then(res => res.json())
@@ -523,9 +532,9 @@ export default function App() {
                 <div>
                   <div className="mb-10">
                     <h1 className="text-3xl font-bold tracking-tight mb-2" style={{ color: '#3d3831' }}>日志</h1>
-                    <p className="text-sm" style={{ color: '#8c7e72' }}>{logs.length} 条记录</p>
+                    <p className="text-sm" style={{ color: '#8c7e72' }}>{logs.length} 条改动记录，{visitors.length} 条访客记录</p>
                   </div>
-                  <LogList logs={logs} sidebarItems={sidebarItems} />
+                  <LogList logs={logs} sidebarItems={sidebarItems} visitors={visitors} />
                 </div>
             ) : (
                 <>
